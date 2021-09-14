@@ -113,7 +113,41 @@ InitGraphics (
   //
   // Hint: Use GetMode/SetMode functions.
   //
+  UINTN                                ModeIdx;
+  UINTN                                TargetModeIdx;
+  UINT32                               MaxHorizontalResolution;
+  UINT32                               MaxverticalResolution;
+  EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE    *Mode;
+  EFI_GRAPHICS_OUTPUT_MODE_INFORMATION *ModeInfo;
+  MaxHorizontalResolution = 0;
+  Mode = GraphicsOutput->Mode;
 
+  for (ModeIdx = 0; ModeIdx < Mode->MaxMode; ModeIdx++) {
+    GraphicsOutput->QueryMode (
+      GraphicsOutput,
+      ModeIdx,
+      &(Mode->SizeOfInfo),
+      &ModeInfo
+      );
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "JOS: Cannot query GraphicsOutput mode - %r\n", Status));
+      return Status;
+    }
+
+    // Select Maximum available horizontal resolution below 1024
+    if (ModeInfo->HorizontalResolution <= 1024 && 
+        MaxHorizontalResolution        <= ModeInfo->HorizontalResolution &&
+        MaxverticalResolution          <= ModeInfo->VerticalResolution) {
+      TargetModeIdx           = ModeIdx;
+      MaxHorizontalResolution = ModeInfo->HorizontalResolution;
+      MaxverticalResolution   = ModeInfo->VerticalResolution;
+    }
+  }
+
+  GraphicsOutput->SetMode(
+    GraphicsOutput,
+    TargetModeIdx
+    );
 
   //
   // Fill screen with black.
@@ -977,7 +1011,7 @@ UefiMain (
   UINTN              EntryPoint;
   VOID               *GateData;
 
-#if 1 ///< Uncomment to await debugging
+#if 0 ///< Uncomment to await debugging
   volatile BOOLEAN   Connected;
   DEBUG ((DEBUG_INFO, "JOS: Awaiting debugger connection\n"));
 
