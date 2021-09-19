@@ -19,6 +19,7 @@
 int mon_help(int argc, char **argv, struct Trapframe *tf);
 int mon_kerninfo(int argc, char **argv, struct Trapframe *tf);
 int mon_backtrace(int argc, char **argv, struct Trapframe *tf);
+int mon_echo(int argc, char **argv, struct Trapframe *tf);
 
 struct Command {
     const char *name;
@@ -31,6 +32,7 @@ static struct Command commands[] = {
         {"help", "Display this list of commands", mon_help},
         {"kerninfo", "Display information about the kernel", mon_kerninfo},
         {"backtrace", "Print stack backtrace", mon_backtrace},
+        {"echo", "Echo user input", mon_echo},
 };
 #define NCOMMANDS (sizeof(commands) / sizeof(commands[0]))
 
@@ -57,10 +59,58 @@ mon_kerninfo(int argc, char **argv, struct Trapframe *tf) {
     return 0;
 }
 
+void
+print_hex_64_padded(uint64_t value) {
+    /* Count zeroes to add to front */
+    size_t zeroes = 16;
+    uint64_t buf = value;
+
+    while (buf != 0) {
+        zeroes--;
+        buf /= 16;
+    }
+
+    for (size_t i = 0; i < zeroes; i++)
+        cprintf("0");
+    cprintf("%lx", value);
+}
+
 int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf) {
-    // LAB 2: Your code here
+    cprintf("Stack backtrace:\n");
 
+    uint64_t rbp = read_rbp();
+
+    while (rbp != 0) {
+        uint64_t *ptr = (uint64_t *) rbp;
+        uint64_t rip = ptr[1];
+
+        cprintf("  rbp ");
+        print_hex_64_padded(rbp);
+        cprintf(" rip ");
+        print_hex_64_padded(rip);
+        cprintf("\n");
+
+        struct Ripdebuginfo info;
+        int error = debuginfo_rip((uintptr_t)rip, &info);
+        if (error == 0)
+            cprintf("    %s:%d: %*s+%lu\n", info.rip_file, info.rip_line, info.rip_fn_namelen, info.rip_fn_name, 
+                rip - info.rip_fn_addr);
+        else
+            cprintf("Error getting debug info for rip %lx\n", rip);
+
+        rbp = *ptr;
+    }
+
+    return 0;
+}
+
+int
+mon_echo(int argc, char **argv, struct Trapframe *tf) {
+    for (int i = 1; i < argc; i++) {
+        cprintf("%s", argv[i]);
+        cprintf(i != argc - 1 ? " " : "\n");
+    }
     return 0;
 }
 
