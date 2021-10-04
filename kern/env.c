@@ -163,6 +163,11 @@ env_alloc(struct Env **newenv_store, envid_t parent_id, enum EnvType type) {
     return 0;
 }
 
+/* Pass the original ELF image to binary/size and bind all the symbols within
+ * its loaded address space specified by image_start/image_end.
+ * Make sure you understand why you need to check that each binding
+ * must be performed within the image_start/image_end range.
+ */
 static int
 bind_functions(struct Env *env, uint8_t *binary, size_t size, uintptr_t image_start, uintptr_t image_end) {
     // LAB 3: Your code here:
@@ -186,7 +191,7 @@ bind_functions(struct Env *env, uint8_t *binary, size_t size, uintptr_t image_st
  *
  * All this is very similar to what our boot loader does, except the boot
  * loader also needs to read the code from disk.  Take a look at
- * boot/main.c to get ideas.
+ * LoaderPkg/Loader/Bootloader.c to get ideas.
  *
  * Finally, this function maps one page for the program's initial stack.
  *
