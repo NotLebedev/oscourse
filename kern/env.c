@@ -215,8 +215,7 @@ bind_functions(struct Env *env, uint8_t *binary, size_t size, uintptr_t image_st
             char *name = names + symbol->st_name;
             uintptr_t addr = find_function(name);
 
-            if (addr) {
-                assert(symbol->st_value >= image_start && symbol->st_value <= image_end);
+            if (addr && symbol->st_value >= image_start && symbol->st_value <= image_end) {
                 *((uintptr_t *)symbol->st_value) = addr;
             }
         }
@@ -267,7 +266,6 @@ bind_functions(struct Env *env, uint8_t *binary, size_t size, uintptr_t image_st
 static int
 load_icode(struct Env *env, uint8_t *binary, size_t size) {
     // LAB 3: Your code here
-
     struct Elf *elf = (struct Elf *) binary;
     if (elf->e_magic != ELF_MAGIC) {
         cprintf("Incorrect format of ELF file");
@@ -305,6 +303,9 @@ load_icode(struct Env *env, uint8_t *binary, size_t size) {
             cprintf("Incorrect filesz of a section");
             return -E_INVALID_EXE;
         }
+
+        if (src + ph->p_filesz > (void *)binary + size || src < (void *)binary)
+            continue;
 
         if (!start_set || (uintptr_t) dst < image_start) {
             image_start = (uintptr_t) dst;

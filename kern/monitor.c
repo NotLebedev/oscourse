@@ -60,22 +60,6 @@ mon_kerninfo(int argc, char **argv, struct Trapframe *tf) {
     return 0;
 }
 
-void
-print_hex_64_padded(uint64_t value) {
-    /* Count zeroes to add to front */
-    size_t zeroes = 16;
-    uint64_t buf = value;
-
-    while (buf != 0) {
-        zeroes--;
-        buf /= 16;
-    }
-
-    for (size_t i = 0; i < zeroes; i++)
-        cprintf("0");
-    cprintf("%lx", value);
-}
-
 int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf) {
     cprintf("Stack backtrace:\n");
@@ -87,9 +71,9 @@ mon_backtrace(int argc, char **argv, struct Trapframe *tf) {
         uint64_t rip = ptr[1];
 
         cprintf("  rbp ");
-        print_hex_64_padded(rbp);
+        cprintf("%016lx", rbp);
         cprintf(" rip ");
-        print_hex_64_padded(rip);
+        cprintf("%016lx", rip);
         cprintf("\n");
 
         struct Ripdebuginfo info;
