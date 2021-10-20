@@ -368,7 +368,7 @@ pmtimer_cpu_frequency(void) {
     const uint64_t wait = 100;
 
     uint64_t pm_delta;
-    uint64_t pm_start = hpet_get_main_cnt();
+    uint64_t pm_start = pmtimer_get_timeval();
     uint64_t tsc_start = read_tsc();
     uint64_t tsc_end;
 
