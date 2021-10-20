@@ -215,7 +215,8 @@ bind_functions(struct Env *env, uint8_t *binary, size_t size, uintptr_t image_st
     for (size_t i = 0; i < symbols_cnt; i++) {
         struct Elf64_Sym *symbol = &symbols[i];
         if (ELF64_ST_BIND(symbol->st_info) == STB_GLOBAL &&
-            ELF64_ST_TYPE(symbol->st_info) == STT_OBJECT) {
+            ELF64_ST_TYPE(symbol->st_info) == STT_OBJECT &&
+            symbol->st_size == sizeof(void *)) {
             char *name = names + symbol->st_name;
             uintptr_t addr = find_function(name);
 
