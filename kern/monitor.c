@@ -47,6 +47,10 @@ static struct Command commands[] = {
         {"backtrace", "Print stack backtrace", mon_backtrace},
         {"echo", "Echo user input", mon_echo},
         {"dumpcmos", "Print CMOS contents", mon_dumpcmos},
+        {"timer_start", "Start timer", mon_start},
+        {"timer_stop", "Stop timer and print elapsed time", mon_stop},
+        {"timer_freq", "Print CPU frequence", mon_frequency},
+        {"memory", "Display free pages", mon_memory},
 };
 #define NCOMMANDS (sizeof(commands) / sizeof(commands[0]))
 
@@ -135,11 +139,39 @@ mon_dumpcmos(int argc, char **argv, struct Trapframe *tf) {
 
 /* Implement timer_start (mon_start), timer_stop (mon_stop), timer_freq (mon_frequency) commands. */
 // LAB 5: Your code here:
+int mon_start(int argc, char **argv, struct Trapframe *tf) {
+    if (argc != 2)
+        return 1;
 
+    timer_start(argv[1]);
+
+    return 0;
+}
+
+int mon_stop(int argc, char **argv, struct Trapframe *tf) {
+    if (argc != 1)
+        return 1;
+    timer_stop();
+
+    return 0;
+}
+
+int mon_frequency(int argc, char **argv, struct Trapframe *tf) {
+    if (argc != 2)
+        return 1;
+
+    timer_cpu_frequency(argv[1]);
+
+    return 0;
+}
 /* Implement memory (mon_memory) command.
  * This command should call dump_memory_lists()
  */
 // LAB 6: Your code here
+int mon_memory(int argc, char **argv, struct Trapframe *tf) {
+    dump_memory_lists();
+    return 0;
+}
 
 /* Implement mon_pagetable() and mon_virt()
  * (using dump_virtual_tree(), dump_page_table())*/
