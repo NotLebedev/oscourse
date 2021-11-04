@@ -11,7 +11,10 @@
 #include <kern/console.h>
 #include <kern/monitor.h>
 #include <kern/kdebug.h>
+#include <kern/tsc.h>
+#include <kern/timer.h>
 #include <kern/env.h>
+#include <kern/pmap.h>
 #include <kern/trap.h>
 #include <kern/kclock.h>
 
@@ -24,6 +27,12 @@ int mon_kerninfo(int argc, char **argv, struct Trapframe *tf);
 int mon_backtrace(int argc, char **argv, struct Trapframe *tf);
 int mon_echo(int argc, char **argv, struct Trapframe *tf);
 int mon_dumpcmos(int argc, char **argv, struct Trapframe *tf);
+int mon_start(int argc, char **argv, struct Trapframe *tf);
+int mon_stop(int argc, char **argv, struct Trapframe *tf);
+int mon_frequency(int argc, char **argv, struct Trapframe *tf);
+int mon_memory(int argc, char **argv, struct Trapframe *tf);
+int mon_pagetable(int argc, char **argv, struct Trapframe *tf);
+int mon_virt(int argc, char **argv, struct Trapframe *tf);
 
 struct Command {
     const char *name;
@@ -123,6 +132,18 @@ mon_dumpcmos(int argc, char **argv, struct Trapframe *tf) {
 
     return 0;
 }
+
+/* Implement timer_start (mon_start), timer_stop (mon_stop), timer_freq (mon_frequency) commands. */
+// LAB 5: Your code here:
+
+/* Implement memory (mon_memory) command.
+ * This command should call dump_memory_lists()
+ */
+// LAB 6: Your code here
+
+/* Implement mon_pagetable() and mon_virt()
+ * (using dump_virtual_tree(), dump_page_table())*/
+// LAB 7: Your code here
 
 /* Kernel monitor command interpreter */
 
