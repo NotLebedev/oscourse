@@ -93,6 +93,9 @@ acpi_find_table(const char *sign) {
     static bool isXSDT = 0;
 
     if (!rsdt) {
+        if (!uefi_lp->ACPIRoot)
+            panic("No rsdp\n");
+
         physaddr_t acpi_phys = uefi_lp->ACPIRoot;
         RSDP *rsdp = mmio_map_region((physaddr_t)acpi_phys, sizeof(*rsdp));
 
