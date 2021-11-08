@@ -153,6 +153,8 @@ acpi_find_table(const char *sign) {
     size_t entries_cnt = (rsdt->h.Length - sizeof(ACPISDTHeader)) / (isXSDT ? 8 : 4);
     for (size_t i = 0; i < entries_cnt; i++) {
         physaddr_t header_physical = rsdt->PointerToOtherSDT[i];
+        if (!header_physical)
+            continue;
         ACPISDTHeader *header = mmio_map_region(header_physical, sizeof(ACPISDTHeader));
         /* Remap using actual size */
         header = mmio_map_region(header_physical, header->Length);
