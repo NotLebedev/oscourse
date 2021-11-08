@@ -620,6 +620,20 @@ check_virtual_tree(struct Page *page, int class) {
 void
 dump_virtual_tree(struct Page *node, int class) {
     // LAB 7: Your code here
+    for (int i = MAX_CLASS; i != class; i--)
+           cprintf(" ");
+    if ((node->state & NODE_TYPE_MASK) == MAPPING_NODE) {
+        cprintf("Mapping to %lx, class %d\n", (long unsigned)node->phy->addr, node->phy->class);
+    } else {
+        cprintf("Intermidiate page, class %d\n", class);
+    }
+
+    if (node->left) {
+        dump_virtual_tree(node->left, class - 1);
+    }
+    if (node->right) {
+        dump_virtual_tree(node->right, class - 1);
+    }
 }
 
 void
@@ -659,6 +673,33 @@ dump_page_table(pte_t *pml4) {
     cprintf("Page table:\n");
     (void)addr;
     // LAB 7: Your code here
+
+    for (int i = 0; i < PML4_ENTRY_COUNT; i++) {
+        if (!(pml4[i] & PTE_P))
+            continue;
+        dump_entry(pml4[i], 512 * GB, 0);
+
+        pdpe_t *pdp = KADDR(PTE_ADDR(pml4[i]));
+        for (int j = 0; j < PDP_ENTRY_COUNT; j++) {
+            if (!(pdp[j] & PTE_P && !(pdp[j] & PTE_PS)))
+                continue;
+            dump_entry(pdp[j], 1 * GB, pdp[j] & PTE_PS);
+
+            pde_t *pd = KADDR(PTE_ADDR(pdp[j]));
+            for (int k = 0; k < PD_ENTRY_COUNT; k++) {
+                if (!(pd[k] & PTE_P && !(pd[k] & PTE_PS)))
+                    continue;
+                dump_entry(pd[k], 2 * MB, pd[k] & PTE_PS);
+
+                pte_t *pt = KADDR(PTE_ADDR(pd[k]));
+                for (int l = 0; l < PT_ENTRY_COUNT; l++) {
+                    if (!(pt[l] & PTE_P))
+                        continue;
+                    dump_entry(pt[l], 4 * KB, 1);
+                }
+            }
+        }
+    }
 }
 
 inline static int

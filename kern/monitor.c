@@ -51,6 +51,8 @@ static struct Command commands[] = {
         {"timer_stop", "Stop timer and print elapsed time", mon_stop},
         {"timer_freq", "Print CPU frequence", mon_frequency},
         {"memory", "Display free pages", mon_memory},
+        {"vmemory", "Display virtual memory tree", mon_virt},
+        {"pgtab", "Display free pages", mon_pagetable},
 };
 #define NCOMMANDS (sizeof(commands) / sizeof(commands[0]))
 
@@ -139,7 +141,8 @@ mon_dumpcmos(int argc, char **argv, struct Trapframe *tf) {
 
 /* Implement timer_start (mon_start), timer_stop (mon_stop), timer_freq (mon_frequency) commands. */
 // LAB 5: Your code here:
-int mon_start(int argc, char **argv, struct Trapframe *tf) {
+int 
+mon_start(int argc, char **argv, struct Trapframe *tf) {
     if (argc != 2)
         return 1;
 
@@ -148,7 +151,8 @@ int mon_start(int argc, char **argv, struct Trapframe *tf) {
     return 0;
 }
 
-int mon_stop(int argc, char **argv, struct Trapframe *tf) {
+int 
+mon_stop(int argc, char **argv, struct Trapframe *tf) {
     if (argc != 1)
         return 1;
     timer_stop();
@@ -156,7 +160,8 @@ int mon_stop(int argc, char **argv, struct Trapframe *tf) {
     return 0;
 }
 
-int mon_frequency(int argc, char **argv, struct Trapframe *tf) {
+int 
+mon_frequency(int argc, char **argv, struct Trapframe *tf) {
     if (argc != 2)
         return 1;
 
@@ -168,7 +173,8 @@ int mon_frequency(int argc, char **argv, struct Trapframe *tf) {
  * This command should call dump_memory_lists()
  */
 // LAB 6: Your code here
-int mon_memory(int argc, char **argv, struct Trapframe *tf) {
+int 
+mon_memory(int argc, char **argv, struct Trapframe *tf) {
     dump_memory_lists();
     return 0;
 }
@@ -176,6 +182,18 @@ int mon_memory(int argc, char **argv, struct Trapframe *tf) {
 /* Implement mon_pagetable() and mon_virt()
  * (using dump_virtual_tree(), dump_page_table())*/
 // LAB 7: Your code here
+int 
+mon_virt(int argc, char **argv, struct Trapframe *tf) {
+    dump_virtual_tree(kspace.root, MAX_CLASS);
+    return 0;
+}
+
+int 
+mon_pagetable(int argc, char **argv, struct Trapframe *tf) {
+    dump_page_table(kspace.pml4);
+    return 0;
+}
+
 
 /* Kernel monitor command interpreter */
 
