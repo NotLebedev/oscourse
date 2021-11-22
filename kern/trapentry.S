@@ -81,5 +81,22 @@ _alltraps:
 # Use TARPHANDLER or TRAPHANDLER_NOEC to setup
 # all trap handlers' entry points
 # (Look up their list in inc/trap.h)
-
+TRAPHADLER(t_divide, T_DIVIDE)
+TRAPHADLER(t_debug , T_DEBUG )
+TRAPHADLER(t_nmi   , T_NMI   )
+TRAPHADLER(t_brkpt , T_BRKPT )
+TRAPHADLER(t_oflow , T_OFLOW )
+TRAPHADLER(t_bound , T_BOUND )
+TRAPHADLER(t_illop , T_ILLOP )
+TRAPHADLER(t_device, T_DEVICE)
+TRAPHADLER(t_dblflt, T_DBLFLT)
+TRAPHADLER(t_tss   , T_TSS   )
+TRAPHADLER(t_segnp , T_SEGNP )
+TRAPHADLER(t_stack , T_STACK )
+TRAPHADLER(t_gpflt , T_GPFLT )
+TRAPHADLER(t_pgflt , T_PGFLT )
+TRAPHADLER(t_fperr , T_FPERR )
+TRAPHADLER(t_align , T_ALIGN )
+TRAPHADLER(t_mchk  , T_MCHK  )
+TRAPHADLER(t_simderr, T_SIMDERR)
 #endif

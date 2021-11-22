@@ -93,11 +93,13 @@ env_init(void) {
     /* Allocate envs array with kzalloc_region
      * (don't forget about rounding) */
     // LAB 8: Your code here
+    envs = kzalloc_region(ROUNDUP(NENV * sizeof(*envs), PAGE_SIZE));
 
     /* Map envs to UENVS read-only,
      * but user-accessible (with PROT_USER_ set) */
     // LAB 8: Your code here
-
+    map_region(&kspace, UENVS, &kspace, (uintptr_t)envs, ROUNDUP(NENV * sizeof(*envs),
+        PAGE_SIZE), PROT_R | PROT_USER_);
     /* Set up envs array */
 
     // LAB 3: Your code here
@@ -319,6 +321,7 @@ load_icode(struct Env *env, uint8_t *binary, size_t size) {
     bool start_set = 0;
     uintptr_t image_end = 0;
     struct Proghdr *ph_array = (struct Proghdr *)(binary + elf->e_phoff);
+    lcr3(env->address_space.cr3);
     for (size_t i = 0; i < elf->e_phnum; i++) {
         struct Proghdr *ph = ph_array + i;
         if (ph->p_type != ELF_PROG_LOAD)
@@ -346,9 +349,13 @@ load_icode(struct Env *env, uint8_t *binary, size_t size) {
         memset(dst + ph->p_filesz, 0, ph->p_memsz - ph->p_filesz);
     }
 
+    lcr3(kspace.cr3);
     env->env_tf.tf_rip = elf->e_entry;
     bind_functions(env, binary, size, image_start, image_end);
     // LAB 8: Your code here
+    void *stack = kzalloc_region(USER_STACK_SIZE);
+    map_region(&(env->address_space), (uintptr_t) (USER_STACK_TOP - USER_STACK_SIZE),
+        &kspace, (uintptr_t) stack, USER_STACK_SIZE, PROT_R | PROT_W | PROT_USER_);
     return 0;
 }
 
@@ -515,6 +522,8 @@ env_run(struct Env *env) {
     curenv = env;
     curenv->env_status = ENV_RUNNING;
     curenv->env_runs++;
+
+    lcr3(curenv->address_space.cr3);
     env_pop_tf(&curenv->env_tf);
 
     while(1) {}

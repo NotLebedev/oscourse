@@ -801,7 +801,7 @@ memcpy_page(struct AddressSpace *dst, uintptr_t va, struct Page *page) {
 
     set_wp(0);
     nosan_memcpy((void *)va, KADDR(page2pa(page)), CLASS_SIZE(page -> class));
-    set_wp(1); 
+    set_wp(1);
 
     switch_address_space(old);
 }
@@ -1515,16 +1515,22 @@ init_address_space(struct AddressSpace *space) {
     /* Allocte page table with alloc_pt into space->cr3
      * (remember to clean flag bits of result with PTE_ADDR) */
     // LAB 8: Your code here
+    if (alloc_pt(&space->cr3))
+      panic ("Cannot alloc_pt, out of memory");
+    space->cr3 = PTE_ADDR(space->cr3);
 
     /* put its kernel virtual address to space->pml4 */
     // LAB 8: Your code here
+    space->pml4 = KADDR(space->cr3);
 
     // Allocate virtual tree root node
     // of type INTERMEDIATE_NODE with alloc_rescriptor() of type
     // LAB 8: Your code here
+    space->root = alloc_descriptor(INTERMEDIATE_NODE);
 
     /* Initialize UVPT */
     // LAB 8: Your code here
+    space->pml4[PML4_INDEX(UVPT)] = space->cr3 | PTE_P | PTE_U;
 
     /* Why this call is required here and what does it do? */
     propagate_one_pml4(space, &kspace);
@@ -1891,17 +1897,17 @@ init_memory(void) {
 
     // Map [X86ADDR((uintptr_t)__text_start),ROUNDUP(X86ADDR((uintptr_t)__text_end), CLASS_SIZE(0))] to
     //     [PADDR(__text_start), ROUNDUP(__text_end, CLASS_SIZE(0))] as R-X
-    map_kernel_region(X86ADDR((uintptr_t)__text_start), PADDR(__text_start), 
+    map_kernel_region(X86ADDR((uintptr_t)__text_start), PADDR(__text_start),
             __text_end - __text_start, PROT_R | PROT_X);
 
     // Map [X86ADDR(KERN_STACK_TOP - KERN_STACK_SIZE), KERN_STACK_TOP] to
     //     [PADDR(bootstack), PADDR(boottop)] as RW-
-    map_kernel_region(X86ADDR(KERN_STACK_TOP - KERN_STACK_SIZE), PADDR(bootstack), 
+    map_kernel_region(X86ADDR(KERN_STACK_TOP - KERN_STACK_SIZE), PADDR(bootstack),
             PADDR(bootstacktop) - PADDR(bootstack), PROT_R | PROT_W);
 
     // Map [X86ADDR(KERN_PF_STACK_TOP - KERN_PF_STACK_SIZE), KERN_PF_STACK_TOP] to
     //     [PADDR(pfstack), PADDR(pfstacktop)] as RW-
-    map_kernel_region(X86ADDR(KERN_PF_STACK_TOP - KERN_PF_STACK_SIZE), PADDR(pfstack), 
+    map_kernel_region(X86ADDR(KERN_PF_STACK_TOP - KERN_PF_STACK_SIZE), PADDR(pfstack),
         PADDR(pfstacktop) - PADDR(pfstack), PROT_R | PROT_W);
 
     if (trace_memory_more) dump_page_table(kspace.pml4);
