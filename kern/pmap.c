@@ -1516,15 +1516,16 @@ init_address_space(struct AddressSpace *space) {
      * (remember to clean flag bits of result with PTE_ADDR) */
     // LAB 8: Your code here
     if (alloc_pt(&space->cr3))
-      panic ("Cannot alloc_pt, out of memory");
+        return -E_NO_MEM;
     space->cr3 = PTE_ADDR(space->cr3);
+    memset(&space->cr3, 0, PAGE_SIZE);
 
     /* put its kernel virtual address to space->pml4 */
     // LAB 8: Your code here
     space->pml4 = KADDR(space->cr3);
 
     // Allocate virtual tree root node
-    // of type INTERMEDIATE_NODE with alloc_rescriptor() of type
+    // of type INTERMEDIATE_NODE with alloc_rescriptosr() of type
     // LAB 8: Your code here
     space->root = alloc_descriptor(INTERMEDIATE_NODE);
 
