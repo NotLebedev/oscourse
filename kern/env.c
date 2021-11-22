@@ -387,6 +387,7 @@ env_create(uint8_t *binary, size_t size, enum EnvType type) {
     if (status < 0)
         panic("Could not load executable : %i", status);
 
+    env->binary = binary;
     env->env_type = type;
 }
 

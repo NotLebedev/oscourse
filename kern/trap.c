@@ -113,6 +113,10 @@ void gpflt_thdlr(void);
 void pgflt_thdlr(void);
 void fperr_thdlr(void);
 void syscall_thdlr(void);
+void dblflt_thdlr(void);
+void mchk_thdlr(void);
+void align_thdlr(void);
+void simderr_thdlr(void);
 
 void
 trap_init(void) {
@@ -124,23 +128,28 @@ trap_init(void) {
 
     /* Insert trap handlers into IDT */
     // LAB 8: Your code here
-    idt[T_DIVIDE] = GATE(0, GD_KT, divide_thdlr, 0);
-    idt[T_DEBUG]  = GATE(0, GD_KT, debug_thdlr, 0);
-    idt[T_NMI]    = GATE(0, GD_KT, nmi_thdlr, 0);
-    idt[T_BRKPT]  = GATE(0, GD_KT, brkpt_thdlr, 3);
-    idt[T_OFLOW]  = GATE(0, GD_KT, oflow_thdlr, 0);
-    idt[T_BOUND]  = GATE(0, GD_KT, bound_thdlr, 0);
-    idt[T_ILLOP]  = GATE(0, GD_KT, illop_thdlr, 0);
-    idt[T_DEVICE] = GATE(0, GD_KT, device_thdlr, 0);
-    idt[T_TSS]    = GATE(0, GD_KT, tss_thdlr, 0);
-    idt[T_SEGNP]  = GATE(0, GD_KT, segnp_thdlr, 0);
-    idt[T_STACK]  = GATE(0, GD_KT, stack_thdlr, 0);
-    idt[T_GPFLT]  = GATE(0, GD_KT, gpflt_thdlr, 0);
-    idt[T_PGFLT]  = GATE(0, GD_KT, pgflt_thdlr, 0);
-    idt[T_FPERR]  = GATE(0, GD_KT, fperr_thdlr, 0);
+    idt[T_DIVIDE] = GATE(0, GD_KT, (uint64_t)divide_thdlr, 0);
+    idt[T_DEBUG]  = GATE(0, GD_KT, (uint64_t)debug_thdlr, 0);
+    idt[T_NMI]    = GATE(0, GD_KT, (uint64_t)nmi_thdlr, 0);
+    idt[T_BRKPT]  = GATE(0, GD_KT, (uint64_t)brkpt_thdlr, 3);
+    idt[T_OFLOW]  = GATE(0, GD_KT, (uint64_t)oflow_thdlr, 0);
+    idt[T_BOUND]  = GATE(0, GD_KT, (uint64_t)bound_thdlr, 0);
+    idt[T_ILLOP]  = GATE(0, GD_KT, (uint64_t)illop_thdlr, 0);
+    idt[T_DEVICE] = GATE(0, GD_KT, (uint64_t)device_thdlr, 0);
+    idt[T_DBLFLT] = GATE(0, GD_KT, (uint64_t)dblflt_thdlr, 0);
+    idt[T_TSS]    = GATE(0, GD_KT, (uint64_t)tss_thdlr, 0);
+    idt[T_SEGNP]  = GATE(0, GD_KT, (uint64_t)segnp_thdlr, 0);
+    idt[T_STACK]  = GATE(0, GD_KT, (uint64_t)stack_thdlr, 0);
+    idt[T_GPFLT]  = GATE(0, GD_KT, (uint64_t)gpflt_thdlr, 0);
+    idt[T_PGFLT]  = GATE(0, GD_KT, (uint64_t)pgflt_thdlr, 0);
+    idt[T_FPERR]  = GATE(0, GD_KT, (uint64_t)fperr_thdlr, 0);
+    idt[T_ALIGN]  = GATE(0, GD_KT, (uint64_t)align_thdlr, 0);
+    idt[T_MCHK]  = GATE(0, GD_KT, (uint64_t)mchk_thdlr, 0);
+    idt[T_SIMDERR]  = GATE(0, GD_KT, (uint64_t)simderr_thdlr, 0);
+    idt[T_SYSCALL]  = GATE(0, GD_KT, (uint64_t)syscall_thdlr, 3);
 
-    idt[IRQ_OFFSET + IRQ_CLOCK] = GATE(0, GD_KT, clock_thdlr, 0);
-    idt[IRQ_OFFSET + IRQ_TIMER] = GATE(0, GD_KT, timer_thdlr, 0);
+    idt[IRQ_OFFSET + IRQ_CLOCK] = GATE(0, GD_KT, (uint64_t)clock_thdlr, 0);
+    idt[IRQ_OFFSET + IRQ_TIMER] = GATE(0, GD_KT, (uint64_t)timer_thdlr, 0);
 
     /* Setup #PF handler dedicated stack
      * It should be switched on #PF because
@@ -266,6 +275,7 @@ trap_dispatch(struct Trapframe *tf) {
         return;
     case T_BRKPT:
         // LAB 8: Your code here
+        monitor(tf);
         return;
     case IRQ_OFFSET + IRQ_SPURIOUS:
         /* Handle spurious interrupts
