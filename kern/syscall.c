@@ -188,7 +188,7 @@ sys_alloc_region(envid_t envid, uintptr_t addr, size_t size, int perm) {
         perm &= ~ALLOC_ONE;
     }
 
-    return map_region(&env->address_space, addr, NULL, 0, size, perm) ? -E_NO_MEM : 0;
+    return map_region(&env->address_space, addr, NULL, 0, size, perm);
 }
 
 /* Map the region of memory at 'srcva' in srcenvid's address space
@@ -229,8 +229,7 @@ sys_map_region(envid_t srcenvid, uintptr_t srcva,
 
     perm |= PROT_USER_;
 
-    return map_region(&dstenv->address_space, dstva, &srcenv->address_space, srcva, size, perm) ?
-        -E_NO_MEM : 0;
+    return map_region(&dstenv->address_space, dstva, &srcenv->address_space, srcva, size, perm);
 }
 
 /* Unmap the region of memory at 'va' in the address space of 'envid'.
@@ -308,9 +307,14 @@ sys_ipc_try_send(envid_t envid, uint32_t value, uintptr_t srcva, size_t size, in
         return -E_IPC_NOT_RECV;
 
     if (srcva < MAX_USER_ADDRESS && env->env_ipc_dstva < MAX_USER_ADDRESS) {
-        if (PAGE_OFFSET(srcva) || PAGE_OFFSET(env->env_ipc_dstva) || 
-            perm & ~PROT_ALL || (perm & ~(PTE_AVAIL | PTE_W)) != (PTE_U | PTE_P))
+        if (PAGE_OFFSET(srcva))
             return -E_INVAL;
+        if (PAGE_OFFSET(env->env_ipc_dstva))
+            return -E_INVAL;
+        if (perm & ~PROT_ALL)
+            return -E_INVAL;
+        //if ((perm & ~(PTE_AVAIL | PTE_W)) != (PTE_U | PTE_P))
+        //    return -E_INVAL;
 
         if (map_region(&env->address_space, env->env_ipc_dstva, 
             &curenv->address_space, srcva, PAGE_SIZE, perm | PROT_USER_))
@@ -371,7 +375,13 @@ sys_ipc_recv(uintptr_t dstva, uintptr_t maxsize) {
 static int
 sys_region_refs(uintptr_t addr, size_t size, uintptr_t addr2, uintptr_t size2) {
     // LAB 10: Your code here
-    return 0;
+    if (addr2 < MAX_USER_ADDRESS) {
+        int maxref1 = region_maxref(&curenv->address_space, addr, size);
+        int maxref2 = region_maxref(&curenv->address_space, addr2, size2);
+        return maxref1 - maxref2;
+    } else {
+        return region_maxref(&curenv->address_space, addr, size);
+    }
 }
 
 /* Dispatches to the correct kernel function, passing the arguments. */
@@ -410,6 +420,8 @@ syscall(uintptr_t syscallno, uintptr_t a1, uintptr_t a2, uintptr_t a3, uintptr_t
         return sys_ipc_try_send((envid_t)a1, (uint32_t)a2, a3,(size_t)a4,(int)a5);
     case SYS_ipc_recv:
         return sys_ipc_recv(a1, a2);
+    case SYS_region_refs:
+        return sys_region_refs(a1, (size_t)a2, a3, a4);
     default:
         return -E_NO_SYS;
     }
