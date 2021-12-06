@@ -9,18 +9,14 @@ extern void umain(int argc, char **argv);
 const volatile struct Env *thisenv;
 const char *binaryname = "<unknown>";
 
-#ifdef JOS_PROG
-void (*volatile sys_exit)(void);
-#endif
-
 extern "C"
 void
 libmain(int argc, char **argv) {
     /* Perform global constructor initialisation (e.g. asan)
     * This must be done as early as possible */
-    //extern void (*__ctors_start)(), (*__ctors_end)();
-    //void (**ctor)() = &__ctors_start;
-    //while (ctor < &__ctors_end) (*ctor++)();
+    extern void (*__ctors_start)(), (*__ctors_end)();
+    void (**ctor)() = &__ctors_start;
+    while (ctor < &__ctors_end) (*ctor++)();
 
     /* Set thisenv to point at our Env structure in envs[]. */
     // LAB 8: Your code here

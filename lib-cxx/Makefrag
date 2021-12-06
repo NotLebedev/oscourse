@@ -1,6 +1,7 @@
 OBJDIRS += lib-cxx
 
 LIB_CXX_SRCFILES :=	lib-cxx/libmain.cpp \
+			lib-cxx/guard.cpp
 
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.c, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_SRCFILES))
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.cpp, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_OBJFILES))
