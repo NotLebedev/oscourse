@@ -74,6 +74,7 @@ KERN_BINFILES := $(patsubst %.c, $(OBJDIR)/%_out, $(KERN_BINFILES))
 else
 KERN_BINLINK  := -b binary
 KERN_BINFILES :=	user/hello \
+			user/hello1 \
 			user/buggyhello \
 			user/buggyhello2 \
 			user/evilhello \
@@ -120,7 +121,8 @@ KERN_BINFILES :=	user/hello \
 			user/vdate \
 			user/bounds \
 			user/implicitconv \
-			user/signedoverflow
+			user/signedoverflow \
+			user-cxx/test
 KERN_BINFILES := $(patsubst %, $(OBJDIR)/%, $(KERN_BINFILES))
 endif
 

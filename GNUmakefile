@@ -42,6 +42,7 @@ TOP = .
 ifdef JOSLLVM
 
 CC	:= clang -target x86_64-gnu-linux -pipe
+CXX := clang++ -target x86_64-gnu-linux -pipe
 AS	:= $(shell command -v llvm-as >/dev/null 2>&1 && echo llvm-as || echo as)
 AR	:= $(shell command -v llvm-ar >/dev/null 2>&1 && echo llvm-ar || echo ar)
 LD	:= ld.lld
@@ -84,6 +85,7 @@ GCCPREFIX := $(shell if x86_64-ispras-elf-objdump -i 2>&1 | grep '^elf64-x86-64$
 endif
 
 CC	:= $(GCCPREFIX)gcc -fno-pic -pipe
+CXX := $(GCCPREFIX)g++ -fno-pic -pipe
 AS	:= $(GCCPREFIX)as
 AR	:= $(GCCPREFIX)ar
 LD	:= $(GCCPREFIX)ld
@@ -263,8 +265,9 @@ all: .git/hooks/post-checkout .git/hooks/pre-commit
 
 # make it so that no intermediate .o files are ever deleted
 .PRECIOUS:  $(OBJDIR)/kern/%.o \
-	   $(OBJDIR)/lib/%.o $(OBJDIR)/fs/%.o $(OBJDIR)/net/%.o \
+	   $(OBJDIR)/lib/%.o $(OBJDIR)/lib-cxx/%.o $(OBJDIR)/fs/%.o $(OBJDIR)/net/%.o \
 	   $(OBJDIR)/user/%.o \
+	   $(OBJDIR)/user-cxx/%.o \
 	   $(OBJDIR)/prog/%.o
 
 KERN_CFLAGS := $(CFLAGS) -DJOS_KERNEL -DLAB=$(LAB) -mcmodel=large -m64
@@ -295,6 +298,8 @@ ifeq ($(CONFIG_KSPACE),y)
 include prog/Makefrag
 else
 include user/Makefrag
+include lib-cxx/Makefrag
+include user-cxx/Makefrag
 include fs/Makefrag
 endif
 

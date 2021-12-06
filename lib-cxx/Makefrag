@@ -1,0 +1,51 @@
+OBJDIRS += lib-cxx
+
+LIB_CXX_SRCFILES :=	lib-cxx/libmain.cpp \
+
+LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.c, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_SRCFILES))
+LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.cpp, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_OBJFILES))
+LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.S, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_OBJFILES))
+
+LIB_C_SRCFILES :=	lib/console.c \
+			lib/exit.c \
+			lib/panic.c \
+			lib/printf.c \
+			lib/printfmt.c \
+			lib/string.c \
+			lib/readline.c \
+			lib/syscall.c \
+			lib/pgfault.c \
+			lib/pfentry.S \
+			lib/fork.c \
+			lib/ipc.c \
+			lib/args.c \
+			lib/fd.c \
+			lib/file.c \
+			lib/fprintf.c \
+			lib/spawn.c \
+			lib/pipe.c \
+			lib/wait.c \
+			lib/uvpt.c \
+			lib/vsyscall.c
+
+LIB_C_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_C_SRCFILES))
+LIB_C_OBJFILES := $(patsubst lib/%.S, $(OBJDIR)/lib/%.o, $(LIB_C_OBJFILES))
+
+$(OBJDIR)/lib-cxx/%.o: lib-cxx/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
+	@echo + cc[USER] $<
+	@mkdir -p $(@D)
+	$(V)$(CXX) $(USER_CFLAGS) $(USER_SAN_CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/lib-cxx/%.o: lib-cxx/%.c $(OBJDIR)/.vars.USER_CFLAGS
+	@echo + cc[USER] $<
+	@mkdir -p $(@D)
+	$(V)$(CC) $(USER_CFLAGS) $(USER_SAN_CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/lib-cxx/%.o: lib-cxx/%.S $(OBJDIR)/.vars.USER_CFLAGS
+	@echo + as[USER] $<
+	@mkdir -p $(@D)
+	$(V)$(CC) $(USER_CFLAGS) $(USER_SAN_CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/lib-cxx/libjos.a: $(LIB_CXX_OBJFILES) $(LIB_C_OBJFILES)
+	@echo + ar $@
+	$(V)$(AR) r $@ $(LIB_CXX_OBJFILES) $(LIB_C_OBJFILES)
