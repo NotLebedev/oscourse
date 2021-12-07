@@ -3,7 +3,7 @@ OBJDIRS += user-cxx
 USERLIBS = jos
 ULDCXXFLAGS = -T user-cxx/user.ld --warn-common
 
-USER_CXX_FLAGS = -I inc-cxx
+USER_CXX_FLAGS = -I inc-cxx -fno-exceptions
 
 $(OBJDIR)/user-cxx/%.o: user-cxx/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<

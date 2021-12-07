@@ -306,7 +306,7 @@ endif
 QEMUOPTS = -hda fat:rw:$(JOS_ESP) -serial mon:stdio -gdb tcp::$(GDBPORT)
 QEMUOPTS += -m 512M -d int,cpu_reset,mmu,pcall -no-reboot
 
-QEMUOPTS += $(shell if $(QEMU) -display none -help | grep -q '^-D '; then echo '-D qemu.log'; fi)
+QEMUOPTS += $(shell if $(QEMU) -display none -help | grep -q '^-D '; then echo '-D /dev/null'; fi)
 IMAGES = $(OVMF_FIRMWARE) $(JOS_LOADER) $(OBJDIR)/kern/kernel $(JOS_ESP)/EFI/BOOT/kernel $(JOS_ESP)/EFI/BOOT/$(JOS_BOOTER)
 ifeq ($(CONFIG_SNAPSHOT),y)
 	QEMUOPTS += -drive file=$(OBJDIR)/fs/fs.img,if=ide,snapshot=on

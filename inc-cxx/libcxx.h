@@ -12,7 +12,7 @@
 
 int main(int, char **);
 
-extern "C" int exit(void);
+extern "C" void exit(void);
 
 extern const char *binaryname;
 extern const volatile int vsys[];
@@ -20,5 +20,9 @@ extern const volatile struct Env *thisenv;
 extern const volatile struct Env envs[NENV];
 
 extern "C" envid_t sys_getenvid(void);
+
+extern "C" int sys_env_destroy(envid_t);
+
+extern "C" void close_all(void);
 
 #endif /* !JOS_INC_LIB_H */

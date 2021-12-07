@@ -12,14 +12,13 @@ const char *binaryname = "<unknown>";
 extern "C"
 void
 libmain(int argc, char **argv) {
-    /* Perform global constructor initialisation (e.g. asan)
-    * This must be done as early as possible */
+    /* Call all global constructors */
     extern void (*__ctors_start)(), (*__ctors_end)();
     void (**ctor)() = &__ctors_start;
-    while (ctor < &__ctors_end) (*ctor++)();
+    while (ctor < &__ctors_end) 
+        (*ctor++)();
 
     /* Set thisenv to point at our Env structure in envs[]. */
-    // LAB 8: Your code here
     thisenv = &envs[ENVX(sys_getenvid())];
 
     /* Save the name of the program so that panic() can use it */
