@@ -113,6 +113,9 @@ devfile_read(struct Fd *fd, void *buf, size_t n) {
    * system server. */
 
     // LAB 10: Your code here:
+    if (!fd || !buf)
+        return E_INVAL;
+
     size_t i;
     for (i = 0; i < n;) {
         fsipcbuf.read.req_fileid = fd->fd_file.id;
@@ -142,9 +145,12 @@ devfile_write(struct Fd *fd, const void *buf, size_t n) {
    * remember that write is always allowed to write *fewer*
    * bytes than requested. */
     // LAB 10: Your code here:
+    if (!fd || !buf)
+        return E_INVAL;
+
     size_t i;
     for (i = 0; i < n;) {
-        size_t next = MIN(n, sizeof(fsipcbuf.write.req_buf));
+        size_t next = MIN(n - i, sizeof(fsipcbuf.write.req_buf));
 
         memcpy(fsipcbuf.write.req_buf, buf, next);
         fsipcbuf.write.req_fileid = fd->fd_file.id;
