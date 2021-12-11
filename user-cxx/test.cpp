@@ -13,20 +13,23 @@ private:
 };
 
 C c0{1};
-C c0_0{10};
+C c0_0{2};
 
-void foo() {
-    static C c1{3};
-    printf("static = %d\n", c1.get());
+void bar() {
+    static C c1{5};
 }
 
+
+void foo() {
+    static C c1{4};
+
+    bar();
+}
 int
 main(int argc, char **argv) {
     printf("Hello, world!\n");
 
-    C c3{0};
-    printf("local = %d\n", c3.get());
-    printf("global = %d\n", c0.get());
+    C c3{3};
     foo();
     
     return 0;
