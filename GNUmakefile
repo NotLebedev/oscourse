@@ -42,7 +42,7 @@ TOP = .
 ifdef JOSLLVM
 
 CC	:= clang -target x86_64-gnu-linux -pipe
-CXX := clang++ -target x86_64-gnu-linux -pipe
+CXX := clang++ -target x86_64-gnu-linux -pipe -DCOMP_CLANGXX
 AS	:= $(shell command -v llvm-as >/dev/null 2>&1 && echo llvm-as || echo as)
 AR	:= $(shell command -v llvm-ar >/dev/null 2>&1 && echo llvm-ar || echo ar)
 LD	:= ld.lld
@@ -85,7 +85,7 @@ GCCPREFIX := $(shell if x86_64-ispras-elf-objdump -i 2>&1 | grep '^elf64-x86-64$
 endif
 
 CC	:= $(GCCPREFIX)gcc -fno-pic -pipe
-CXX := $(GCCPREFIX)g++ -fno-pic -pipe
+CXX := $(GCCPREFIX)g++ -fno-pic -pipe -DCOMP_GXX
 AS	:= $(GCCPREFIX)as
 AR	:= $(GCCPREFIX)ar
 LD	:= $(GCCPREFIX)ld
