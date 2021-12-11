@@ -23,6 +23,9 @@ sys_cputs(const char *s, size_t len) {
 
     /* Check that the user has permission to read memory [s, s+len).
     * Destroy the environment if not. */
+#ifdef SANITIZE_SHADOW_BASE
+    platform_asan_unpoison((void *)s, ROUNDUP(len + 1, 4096));
+#endif
     user_mem_assert(curenv, s, len, PROT_R | PROT_USER_);
     cprintf("%.*s", (int)len, s);
     return 0;
@@ -175,7 +178,9 @@ sys_alloc_region(envid_t envid, uintptr_t addr, size_t size, int perm) {
     if (envid2env(envid, &env, 1))
         return -E_BAD_ENV;
 
-    if (CLASS_MASK(0) & addr || addr > MAX_USER_ADDRESS || perm & ~PROT_ALL)
+    if (CLASS_MASK(0) & addr)
+        return -E_INVAL;
+    if ( (addr > MAX_USER_ADDRESS) )
         return -E_INVAL;
 
     perm |= PROT_LAZY;
