@@ -178,7 +178,9 @@ sys_alloc_region(envid_t envid, uintptr_t addr, size_t size, int perm) {
     if (envid2env(envid, &env, 1))
         return -E_BAD_ENV;
 
-    if (CLASS_MASK(0) & addr || addr > MAX_USER_ADDRESS || perm & ~PROT_ALL)
+    if (CLASS_MASK(0) & addr)
+        return -E_INVAL;
+    if ( (addr > MAX_USER_ADDRESS) )
         return -E_INVAL;
 
     perm |= PROT_LAZY;
