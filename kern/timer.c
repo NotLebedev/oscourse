@@ -106,7 +106,7 @@ acpi_find_table(const char *sign) {
         physaddr_t rsdt_phys;
         if (rsdp->Revision) {
             /* ACPI 2.0 or higher is used */
-            /* Validate checksum of full struct 
+            /* Validate checksum of full struct
              * Calculate and validate checksum of first and second halfs*/
             uint8_t checksum = 0;
             uint8_t *iter;
@@ -143,7 +143,7 @@ acpi_find_table(const char *sign) {
 
         /* Validate header checksum */
         uint8_t checksum = 0;
- 
+
         for (int i = 0; i < rsdt->h.Length; i++)
             checksum += ((uint8_t *) &rsdt->h)[i];
         if (checksum)
@@ -152,7 +152,12 @@ acpi_find_table(const char *sign) {
 
     size_t entries_cnt = (rsdt->h.Length - sizeof(ACPISDTHeader)) / (isXSDT ? 8 : 4);
     for (size_t i = 0; i < entries_cnt; i++) {
-        physaddr_t header_physical = rsdt->PointerToOtherSDT[i];
+        physaddr_t header_physical = 0;
+        if (!isXSDT) {
+            header_physical = rsdt->PointerToOtherSDT[i];
+        } else {
+            header_physical = ((int64_t *)(void *)rsdt->PointerToOtherSDT)[i];
+        }
         if (!header_physical)
             continue;
         ACPISDTHeader *header = mmio_map_region(header_physical, sizeof(ACPISDTHeader));
