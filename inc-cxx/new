@@ -1,0 +1,10 @@
+#ifndef JOS_INC_NEW_H
+#define JOS_INC_NEW_H
+
+namespace std {
+enum class align_val_t : size_t {};
+struct nothrow_t { explicit nothrow_t() = default; };
+extern const nothrow_t nothrow;
+}
+
+#endif

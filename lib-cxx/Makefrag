@@ -5,7 +5,14 @@ LIB_CXX_SRCFILES :=	lib-cxx/libmain.cpp \
 			lib-cxx/exit.cpp \
 			lib-cxx/atexit.cpp \
 			lib-cxx/malloc.cpp \
-			lib-cxx/pool-allocator.cpp
+			lib-cxx/pool-allocator.cpp \
+			lib-cxx/class_type_info.cpp \
+			lib-cxx/hash_bytes.cpp \
+			lib-cxx/vmi_class_type_info.cpp \
+			lib-cxx/si_class_type_info.cpp \
+			lib-cxx/tinfo.cpp \
+			lib-cxx/new.cpp \
+			lib-cxx/pure.cpp
 
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.c, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_SRCFILES))
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.cpp, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_OBJFILES))
@@ -35,7 +42,7 @@ LIB_C_SRCFILES :=	lib/console.c \
 LIB_C_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_C_SRCFILES))
 LIB_C_OBJFILES := $(patsubst lib/%.S, $(OBJDIR)/lib/%.o, $(LIB_C_OBJFILES))
 
-LIB_CXX_CFLAGS := -fno-exceptions -fno-rtti
+LIB_CXX_CFLAGS := -fno-exceptions
 
 $(OBJDIR)/lib-cxx/%.o: lib-cxx/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
