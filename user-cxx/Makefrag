@@ -3,7 +3,7 @@ OBJDIRS += user-cxx
 USERLIBS = jos
 ULDCXXFLAGS = -T user-cxx/user.ld --warn-common
 
-USER_CXX_FLAGS = -I inc-cxx -fno-exceptions
+USER_CXX_FLAGS = -I inc-cxx -fno-exceptions -fno-rtti
 
 $(OBJDIR)/user-cxx/%.o: user-cxx/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
@@ -15,4 +15,3 @@ $(OBJDIR)/user-cxx/%: $(OBJDIR)/user-cxx/%.o $(OBJDIR)/lib-cxx/entry.o $(USERLIB
 	$(V)$(LD) -o $@ $(ULDCXXFLAGS) $(LDFLAGS) $(USER_SAN_LDFLAGS) -nostdlib $(OBJDIR)/lib-cxx/entry.o $(USER_EXTRA_OBJFILES) $@.o -L$(OBJDIR)/lib-cxx $(USERLIBS:%=-l%) $(GCC_LIB)
 	$(V)$(OBJDUMP) -S $@ > $@.asm
 	$(V)$(NM) -n $@ > $@.sym
-

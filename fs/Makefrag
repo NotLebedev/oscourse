@@ -34,6 +34,7 @@ USERAPPS :=		$(OBJDIR)/user/init \
 			$(OBJDIR)/user/date \
 			$(OBJDIR)/user/vdate \
 			$(OBJDIR)/user-cxx/test \
+			$(OBJDIR)/user-cxx/malloc-test \
 
 
 FSIMGFILES := $(FSIMGTXTFILES) $(USERAPPS)

@@ -3,7 +3,9 @@ OBJDIRS += lib-cxx
 LIB_CXX_SRCFILES :=	lib-cxx/libmain.cpp \
 			lib-cxx/guard.cpp \
 			lib-cxx/exit.cpp \
-			lib-cxx/atexit.cpp
+			lib-cxx/atexit.cpp \
+			lib-cxx/malloc.cpp \
+			lib-cxx/pool-allocator.cpp
 
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.c, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_SRCFILES))
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.cpp, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_OBJFILES))
@@ -33,7 +35,7 @@ LIB_C_SRCFILES :=	lib/console.c \
 LIB_C_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_C_SRCFILES))
 LIB_C_OBJFILES := $(patsubst lib/%.S, $(OBJDIR)/lib/%.o, $(LIB_C_OBJFILES))
 
-LIB_CXX_CFLAGS := -fno-exceptions
+LIB_CXX_CFLAGS := -fno-exceptions -fno-rtti
 
 $(OBJDIR)/lib-cxx/%.o: lib-cxx/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
