@@ -22,7 +22,7 @@
 // see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 // <http://www.gnu.org/licenses/>.
 
-#include "typeinfo"
+#include <inc-cxx/typeinfo>
 #include "stddef.h"
 
 // Class declarations shared between the typeinfo implementation files.

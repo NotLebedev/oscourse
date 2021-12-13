@@ -45,7 +45,7 @@
 
 #pragma GCC visibility push(default)
 
-#include "typeinfo"
+#include <inc-cxx/typeinfo>
 
 namespace __cxxabiv1
 {
