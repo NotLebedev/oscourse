@@ -1,10 +1,28 @@
 #ifndef JOS_INC_NEW_H
 #define JOS_INC_NEW_H
 
+#include <stddef.h>
+
 namespace std {
 enum class align_val_t : size_t {};
+
 struct nothrow_t { explicit nothrow_t() = default; };
 extern const nothrow_t nothrow;
+
+struct destroying_delete_t {
+    explicit destroying_delete_t() = default;
+};
+inline constexpr destroying_delete_t destroying_delete{};
+
+inline constexpr size_t
+    hardware_destructive_interference_size = alignof(max_align_t);
+inline constexpr size_t
+    hardware_constructive_interference_size = alignof(max_align_t);
+
+typedef void (*new_handler)();
+
+new_handler get_new_handler() noexcept;
+new_handler set_new_handler(new_handler new_p) noexcept;
 }
 
 #endif

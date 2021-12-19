@@ -178,10 +178,11 @@ PoolAllocatorNoAsanImpl::PoolAllocatorNoAsanImpl() {
         pools[i].init(poolProperties[i][0], poolProperties[i][1]);
 }
 
+
+static PoolAllocatorNoAsanImpl impl{};
 PoolAllocator *get() {
     // Warning, not thread-safe at all. Luckily there are no threads in this
     // version of JOS, so well, whatever ¯\_(ツ)_/¯
-    static PoolAllocatorNoAsanImpl impl{};
     return &impl;
 }
 

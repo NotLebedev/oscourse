@@ -2,8 +2,31 @@
 #include <stddef.h>
 #include <inc-cxx/new>
 
+namespace std {
+void defaultNewHandler() {
+    abort();
+}
+
+new_handler newHandler = defaultNewHandler;
+
+new_handler get_new_handler() noexcept {
+    return newHandler;
+}
+new_handler set_new_handler(new_handler new_p) noexcept {
+    new_handler oldNewHandler = nullptr;
+    if (newHandler != defaultNewHandler)
+        oldNewHandler = newHandler;
+
+    newHandler = new_p;
+    return oldNewHandler;
+}
+}
+
 void * operator new(size_t size) {
-    return malloc(size);
+    void *res = malloc(size);
+    if (res == nullptr)
+        std::newHandler();
+    return res;
 }
 
 void* operator new(size_t size, const std::nothrow_t&) noexcept {
@@ -51,7 +74,10 @@ operator delete[] (void* ptr, size_t) noexcept
 }
 
 void *operator new(size_t size, std::align_val_t alignment) {
-    return aligned_alloc(static_cast<size_t>(alignment), size);
+    void *res = aligned_alloc(static_cast<size_t>(alignment), size);
+    if (res == nullptr)
+        std::newHandler();
+    return res;
 }
 
 void*

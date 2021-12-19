@@ -1,10 +1,9 @@
 #include <cstdlib>
 #include <cstdio>
+#include <new>
 
 int *fill(int size) {
-    int *c = (int *) malloc(size * sizeof(*c));
-    if (c == nullptr)
-        return nullptr;
+    int *c = new int[size];
 
     for (int i = 0; i < size; i++)
         c[i] = i;
@@ -13,32 +12,34 @@ int *fill(int size) {
 }
 
 void print(int *c, int size) {
-    printf("[");
+    printf("[]");
     for (int i = 0; i < size; i++)
         printf("%d, ", c[i]);
     printf("]\n");
+}
+
+void hdlr() {
+    cprintf("Out of memory!\n");
+    std::abort();
 }
 
 int main(int argc, char **argv) {
     int *c = fill(10);
     print(c, 10);
 
-    free(c);
+    delete[] c;
+
+    std::set_new_handler(hdlr);
 
     c = fill(100);
     print(c, 100);
 
-    free(c);
+    delete[] c;
 
     c = fill(10000000);
-    if (c == nullptr) {
-        printf("Out of memory!\n");
-        std::abort();
-    }
     print(c, 10000000);
 
-    free(c);
-
+    delete[] c;
 
     return 0;
 }

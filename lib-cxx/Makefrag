@@ -42,7 +42,7 @@ LIB_C_SRCFILES :=	lib/console.c \
 LIB_C_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_C_SRCFILES))
 LIB_C_OBJFILES := $(patsubst lib/%.S, $(OBJDIR)/lib/%.o, $(LIB_C_OBJFILES))
 
-LIB_CXX_CFLAGS := -fno-exceptions
+LIB_CXX_CFLAGS := -fno-exceptions -std=c++20
 
 $(OBJDIR)/lib-cxx/%.o: lib-cxx/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<

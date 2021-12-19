@@ -7,7 +7,7 @@
 #ifndef JOS_INC_LIB_H
 #define JOS_INC_LIB_H 1
 
-#include <inc/types.h>
+#include <inc-cxx/types.h>
 #include <inc/env.h>
 #include <inc/syscall.h>
 
