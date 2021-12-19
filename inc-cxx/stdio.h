@@ -1,7 +1,7 @@
 #ifndef JOS_INC_STDIO_H
 #define JOS_INC_STDIO_H
 
-#include <inc/stdarg.h>
+#include <inc-cxx/stdarg.h>
 #include <stddef.h>
 
 #ifndef NULL

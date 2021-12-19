@@ -8,8 +8,8 @@
 #define JOS_INC_LIB_H 1
 
 #include <inc-cxx/types.h>
-#include <inc/env.h>
-#include <inc/syscall.h>
+#include <inc-cxx/env.h>
+#include <inc-cxx/syscall.h>
 
 #ifdef SANITIZE_USER_SHADOW_BASE
 /* asan unpoison routine used for whitelisting regions. */
