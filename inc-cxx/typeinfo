@@ -30,7 +30,7 @@
 #define _TYPEINFO
 
 #if __cplusplus >= 201103L
-#include "hash_bytes.h"
+#include "../lib-cxx/hash_bytes.h"
 #endif
 
 extern "C++" {
