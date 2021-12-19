@@ -12,7 +12,8 @@ LIB_CXX_SRCFILES :=	lib-cxx/libmain.cpp \
 			lib-cxx/si_class_type_info.cpp \
 			lib-cxx/tinfo.cpp \
 			lib-cxx/new.cpp \
-			lib-cxx/pure.cpp
+			lib-cxx/pure.cpp \
+			lib-cxx/aux_type_info.cpp
 
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.c, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_SRCFILES))
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.cpp, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_OBJFILES))
