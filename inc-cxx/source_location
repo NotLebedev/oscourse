@@ -1,0 +1,47 @@
+#ifndef JOS_INC_SOURCE_LOCATION
+#define JOS_INC_SOURCE_LOCATION
+
+#if __has_builtin(__builtin_source_location)
+namespace std {
+class source_location {
+public:
+static consteval source_location
+current(const void* __p = __builtin_source_location()) noexcept
+{
+  source_location __ret;
+  __ret._M_impl = static_cast <const __impl*>(__p);
+  return __ret;
+}
+
+constexpr source_location() noexcept { }
+
+constexpr unsigned
+line() const noexcept
+{ return _M_impl ? _M_impl->_M_line : 0u; }
+
+constexpr unsigned
+column() const noexcept
+{ return _M_impl ? _M_impl->_M_column : 0u; }
+
+constexpr const char*
+file_name() const noexcept
+{ return _M_impl ? _M_impl->_M_file_name : ""; }
+
+constexpr const char*
+function_name() const noexcept
+{ return _M_impl ? _M_impl->_M_function_name : ""; }
+
+private:
+struct __impl
+{
+  const char* _M_file_name;
+  const char* _M_function_name;
+  unsigned _M_line;
+  unsigned _M_column;
+};
+
+const __impl* _M_impl = nullptr;
+};
+}
+#endif
+#endif

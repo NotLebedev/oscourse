@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <limits>
-
 #include <climits>
+#include <source_location>
 
 #define LIMITS_TEST_PRINT(TYPE, FORMAT)             \
 printf(#TYPE " " FORMAT " " FORMAT " " FORMAT "\n", \
@@ -55,8 +55,21 @@ void testCLimits() {
     CLIMITS_TEST_PRINT(ULLONG_MAX, "%llu");
 }
 
+void log(const char *message, const std::source_location& location = std::source_location::current())
+{
+    printf("Debug: %s:%d %s\n", location.file_name(), location.line(), message);
+}
+
+void testSourceLocation() {
+    log("hello");
+    log("world");
+    log("test", std::source_location::current());
+    log("test", std::source_location::current());
+}
+
 int main(int argc, char **argv) {
     testLimits();
     testCLimits();
+    testSourceLocation();
     return 0;
 }
