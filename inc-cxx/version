@@ -1,0 +1,6 @@
+#ifndef JOS_INC_VERSION
+#define JOS_INC_VERSION
+
+#define JOS_LIBCXX_VERSION_NUMBER 1
+
+#endif

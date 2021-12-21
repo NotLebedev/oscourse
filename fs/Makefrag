@@ -37,6 +37,7 @@ USERAPPS :=		$(OBJDIR)/user/init \
 			$(OBJDIR)/user-cxx/malloc-test \
 			$(OBJDIR)/user-cxx/new-test \
 			$(OBJDIR)/user-cxx/rtti-test \
+			$(OBJDIR)/user-cxx/lib-test \
 
 
 FSIMGFILES := $(FSIMGTXTFILES) $(USERAPPS)

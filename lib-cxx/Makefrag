@@ -53,12 +53,12 @@ $(OBJDIR)/lib-cxx/%.o: lib-cxx/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
 $(OBJDIR)/lib-cxx/%.o: lib-cxx/%.c $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
 	@mkdir -p $(@D)
-	$(V)$(CC) $(USER_CFLAGS) $(USER_SAN_CFLAGS) -c -o $@ $<
+	$(V)$(CC) $(USER_CFLAGS) $(LIB_CXX_CFLAGS) $(USER_SAN_CFLAGS) -c -o $@ $<
 
 $(OBJDIR)/lib-cxx/%.o: lib-cxx/%.S $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + as[USER] $<
 	@mkdir -p $(@D)
-	$(V)$(CC) $(USER_CFLAGS) $(USER_SAN_CFLAGS) -c -o $@ $<
+	$(V)$(CC) $(USER_CFLAGS) $(LIB_CXX_CFLAGS) $(USER_SAN_CFLAGS) -c -o $@ $<
 
 $(OBJDIR)/lib-cxx/libjos.a: $(LIB_CXX_OBJFILES) $(LIB_C_OBJFILES)
 	@echo + ar $@
