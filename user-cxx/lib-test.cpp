@@ -4,7 +4,7 @@
 #include <source_location>
 #include <stdint.h>
 #include <initializer_list>
-#include <type_traits_>
+#include <type_traits>
 
 #define LIMITS_TEST_PRINT(TYPE, FORMAT)             \
 printf(#TYPE " " FORMAT " " FORMAT " " FORMAT "\n", \
@@ -102,11 +102,20 @@ void testInitializerList(std::initializer_list<int> l) {
     printf("The list bound to auto has size() = %ld\n", al.size());
 }
 
+class Class {};
+void testTypeTraits() {
+    printf("is_floating_point Class %d\n", std::is_floating_point<Class>::value);
+    printf("is_floating_point float %d\n", std::is_floating_point<float>::value);
+    printf("is_floating_point double %d\n", std::is_floating_point<double>::value);
+    printf("is_floating_point char * %d\n", std::is_floating_point<char *>::value);
+}
+
 int main(int argc, char **argv) {
     testLimits();
     testCLimits();
     testSourceLocation();
     testStdint();
     testInitializerList({1, 2, 3, 4, 10});
+    testTypeTraits();
     return 0;
 }
