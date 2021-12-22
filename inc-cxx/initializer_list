@@ -1,0 +1,47 @@
+#ifndef JOS_INC_INITIALIZER_LIST
+#define JOS_INC_INITIALIZER_LIST
+
+namespace std {
+
+template<class T>
+class initializer_list
+{
+public:
+    typedef T value_type;
+    typedef const T& reference;
+    typedef const T& const_reference;
+    typedef size_t size_type;
+    typedef const T* iterator;
+    typedef const T* const_iterator;
+
+private:
+    iterator _M_array;
+    size_type _M_len;
+  
+    constexpr initializer_list(const_iterator iter, size_type len)
+        : _M_array(iter), _M_len(len) { }
+
+public:
+    constexpr initializer_list() noexcept
+        : _M_array(0), _M_len(0) { }
+
+    constexpr size_type
+    size() const noexcept { return _M_len; }
+
+    constexpr const_iterator begin() const noexcept { return _M_array; }
+
+    constexpr const_iterator end() const noexcept { return begin() + size(); }
+};
+
+template<class T>
+constexpr const T* begin(initializer_list<T> ils) noexcept {
+    return ils.begin();
+}
+
+template<class T>
+constexpr const T* end(initializer_list<T> ils) noexcept {
+    return ils.end();
+}
+}
+
+#endif

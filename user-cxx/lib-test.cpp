@@ -2,6 +2,9 @@
 #include <limits>
 #include <climits>
 #include <source_location>
+#include <stdint.h>
+#include <initializer_list>
+#include <type_traits_>
 
 #define LIMITS_TEST_PRINT(TYPE, FORMAT)             \
 printf(#TYPE " " FORMAT " " FORMAT " " FORMAT "\n", \
@@ -67,9 +70,43 @@ void testSourceLocation() {
     log("test", std::source_location::current());
 }
 
+void testStdint() {
+    uint8_t a;
+    uint16_t b;
+    uint32_t c;
+    uint64_t d;
+    (void) a;
+    (void) b;
+    (void) c;
+    (void) d;
+
+    printf("INT_LEAST32_MIN %d\n", INT_LEAST32_MIN);
+}
+
+void testInitializerList(std::initializer_list<int> l) {
+    for (const int *iter = std::begin(l); iter != std::end(l); iter++)
+        printf("%d ", *iter);
+    printf("\n");
+
+    for (int x : l)
+        printf("%d ", x);
+    printf("\n");
+
+    // Implicit bounding
+    for (auto x : {-1, -2, -3})
+        printf("%d ", x);
+    printf("\n");
+
+    auto al = {10, 11, 12};
+
+    printf("The list bound to auto has size() = %ld\n", al.size());
+}
+
 int main(int argc, char **argv) {
     testLimits();
     testCLimits();
     testSourceLocation();
+    testStdint();
+    testInitializerList({1, 2, 3, 4, 10});
     return 0;
 }
