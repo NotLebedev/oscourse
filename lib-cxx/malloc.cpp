@@ -23,15 +23,21 @@ extern "C" void* calloc(size_t num, size_t size) {
 }
 
 extern "C" void free(void* ptr) {
+    if (ptr == nullptr || ptr == NULL)
+        return;
     PoolAllocator *alloc = get();
     alloc->free(ptr);
 }
 
 extern "C" void* realloc(void* ptr, size_t new_size) {
-    if (ptr == nullptr)
+    if (ptr == nullptr || ptr == NULL)
         return malloc(new_size);
 
     PoolAllocator *alloc = get();
+    if (new_size == 0) {
+        free(ptr);
+        return nullptr;
+    }
     size_t olChunkSize = alloc->getChunkSize(ptr);
     if (olChunkSize == 0)
         return nullptr;

@@ -81,6 +81,7 @@ void *getMemory() {
     static int chunkIdx = 0;
     void *pool_ptr = ROUNDUP(&__bss_end + PAGE_SIZE, CHUNK_FIXED_SIZE) +
         chunkIdx * CHUNK_FIXED_SIZE;
+    chunkIdx++;
     sys_alloc_region(CURENVID, pool_ptr, CHUNK_FIXED_SIZE, PROT_RW);
     return pool_ptr;
 }
@@ -169,7 +170,7 @@ void PoolAllocatorNoAsanImpl::free(void *addr) {
     for (auto & pool : pools)
         if (pool.returnChunk(addr))
             return;
-    // printf("Free of address that was not previously returned by malloc");
+    //printf("Free of address that was not previously returned by malloc");
     abort();
 }
 

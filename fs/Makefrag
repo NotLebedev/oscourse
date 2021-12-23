@@ -38,6 +38,7 @@ USERAPPS :=		$(OBJDIR)/user/init \
 			$(OBJDIR)/user/new-test \
 			$(OBJDIR)/user/rtti-test \
 			$(OBJDIR)/user/lib-test \
+			$(OBJDIR)/user/tiny_free \
 
 
 FSIMGFILES := $(FSIMGTXTFILES) $(USERAPPS)
