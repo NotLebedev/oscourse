@@ -782,6 +782,8 @@ struct conditional<true,_Tp1,_Tp2>
 #undef __SPEC_2
 
 //} // tr1
+template <bool b, class T = void>
+  using enable_if_t = typename enable_if<b, T>::type;
 
 }
 

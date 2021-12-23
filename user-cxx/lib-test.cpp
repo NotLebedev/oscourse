@@ -2,9 +2,10 @@
 #include <limits>
 #include <climits>
 #include <source_location>
-#include <stdint.h>
+#include <cstdint>
 #include <initializer_list>
 #include <type_traits>
+#include <bit>
 
 #define LIMITS_TEST_PRINT(TYPE, FORMAT)             \
 printf(#TYPE " " FORMAT " " FORMAT " " FORMAT "\n", \
@@ -110,6 +111,18 @@ void testTypeTraits() {
     printf("is_floating_point char * %d\n", std::is_floating_point<char *>::value);
 }
 
+void testBit() {
+    printf("rotl %x\n", std::rotl(124827u, 0u));
+    printf("rotl %x\n", std::rotl(124827u, 1u));
+    printf("rotl %x\n", std::rotl(124827u, 2u));
+    printf("rotl %x\n", std::rotl(124827u, 3u));
+    printf("rotl %x\n", std::rotl(124827u, 4u));
+    printf("rotl %x\n", std::rotl(124827u, 5u));
+
+    printf("countr_zero %d\n", std::countr_zero(8u));
+    printf("countr_one %d\n", std::countr_one(7u));
+}
+
 int main(int argc, char **argv) {
     testLimits();
     testCLimits();
@@ -117,5 +130,6 @@ int main(int argc, char **argv) {
     testStdint();
     testInitializerList({1, 2, 3, 4, 10});
     testTypeTraits();
+    testBit();
     return 0;
 }
