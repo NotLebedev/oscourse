@@ -105,7 +105,7 @@ static int test_main_runner(void)
     printf("OK\n");
 
     printf("Testing large: ");
-    p = malloc (262144);
+    p = malloc (1024*255); // Modified to fit in largest Asan and NoAsan chunk
     printf("(%p) ", p);
     free(p);
     printf("OK\n");
@@ -237,7 +237,7 @@ int main(int argc, char **argv)
     // Ensure that realloc(n, 0) frees memory, allocated by malloc.
     // See 0178ab35.
     for (uint32_t i = 0; i < 10; i++) {
-        void *p = malloc(1024*256);
+        void *p = malloc(1024*255); // Modified to fit in largest Asan and NoAsan chunk
         if (p == NULL) {
             printf("Borked free\n");
             abort();

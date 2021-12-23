@@ -41,8 +41,10 @@ extern "C" void* realloc(void* ptr, size_t new_size) {
     size_t olChunkSize = alloc->getChunkSize(ptr);
     if (olChunkSize == 0)
         return nullptr;
-    if (olChunkSize >= new_size)
+    if (olChunkSize >= new_size) {
+        alloc->refresh(ptr, new_size);
         return ptr;
+    }
 
     void *n = alloc->alloc(new_size, alignof(max_align_t));
     if (n == nullptr)
