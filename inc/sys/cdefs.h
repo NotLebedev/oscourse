@@ -9,11 +9,10 @@
 #define _Noreturn [[noreturn]]
 #define restrict
 
-#define __ENTRY_POINT main
-
 #define typeof __typeof__
 
-#define __ENTRY_DECL extern "C++"
+#define __ENTRY_POINT main
+#define __ENTRY_DECL extern "C++" int
 
 #else
 
@@ -21,7 +20,7 @@
 #define	__END_DECLS
 
 #define ENTRY_POINT umain
-#define __ENTRY_DECL
+#define __ENTRY_DECL void
 #endif
 
 #endif

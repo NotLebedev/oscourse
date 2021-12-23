@@ -2,6 +2,7 @@
 #define JOS_DWARF_H
 #include <inc/types.h>
 #include <inc/string.h>
+#include <inc/stdio.h>
 #include <inc/sys/cdefs.h>
 __BEGIN_DECLS
 /* DWARF4 debugging info */

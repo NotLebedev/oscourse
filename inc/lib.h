@@ -25,7 +25,7 @@
 
 /* main user program */
 /* defined in sys/cdefs.h*/
-__ENTRY_DECL void __ENTRY_POINT(int argc, char **argv);
+__ENTRY_DECL __ENTRY_POINT(int argc, char **argv);
 
 __BEGIN_DECLS
 
