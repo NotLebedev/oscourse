@@ -2,6 +2,9 @@ OBJDIRS += user
 
 USERLIBS = jos
 
+ULDCXXFLAGS = -T user/user.ld --warn-common
+USER_CXX_FLAGS = -I inc-cxx -fno-exceptions -std=c++20
+
 $(OBJDIR)/user/%.o: user/%.c $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
 	@mkdir -p $(@D)
@@ -13,3 +16,13 @@ $(OBJDIR)/user/%: $(OBJDIR)/user/%.o $(OBJDIR)/lib/entry.o $(USERLIBS:%=$(OBJDIR
 	$(V)$(OBJDUMP) -S $@ > $@.asm
 	$(V)$(NM) -n $@ > $@.sym
 
+$(OBJDIR)/user/%.oo: user/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
+	@echo + cc[USER] $<
+	@mkdir -p $(@D)
+	$(V)$(CXX) $(USER_CFLAGS) $(USER_CXX_FLAGS) $(USER_SAN_CFLAGS) -c -o $@ $<
+
+$(OBJDIR)/user/%: $(OBJDIR)/user/%.oo $(OBJDIR)/lib-cxx/entry.o $(USERLIBS:%=$(OBJDIR)/lib-cxx/lib%.a) $(USER_EXTRA_OBJFILES) user/user.ld
+	@echo + ld $@
+	$(V)$(LD) -o $@ $(ULDCXXFLAGS) $(LDFLAGS) $(USER_SAN_LDFLAGS) -nostdlib $(OBJDIR)/lib-cxx/entry.o $(USER_EXTRA_OBJFILES) $@.oo -L$(OBJDIR)/lib-cxx $(USERLIBS:%=-l%) $(GCC_LIB)
+	$(V)$(OBJDUMP) -S $@ > $@.asm
+	$(V)$(NM) -n $@ > $@.sym

@@ -299,7 +299,6 @@ include prog/Makefrag
 else
 include user/Makefrag
 include lib-cxx/Makefrag
-include user-cxx/Makefrag
 include fs/Makefrag
 endif
 

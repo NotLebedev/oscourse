@@ -33,11 +33,11 @@ USERAPPS :=		$(OBJDIR)/user/init \
 			$(OBJDIR)/user/hello1 \
 			$(OBJDIR)/user/date \
 			$(OBJDIR)/user/vdate \
-			$(OBJDIR)/user-cxx/test \
-			$(OBJDIR)/user-cxx/malloc-test \
-			$(OBJDIR)/user-cxx/new-test \
-			$(OBJDIR)/user-cxx/rtti-test \
-			$(OBJDIR)/user-cxx/lib-test \
+			$(OBJDIR)/user/test \
+			$(OBJDIR)/user/malloc-test \
+			$(OBJDIR)/user/new-test \
+			$(OBJDIR)/user/rtti-test \
+			$(OBJDIR)/user/lib-test \
 
 
 FSIMGFILES := $(FSIMGTXTFILES) $(USERAPPS)
