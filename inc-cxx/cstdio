@@ -1,1 +1,16 @@
+#ifndef JOS_INC_CSTDIO
+#define JOS_INC_CSTDIO
+
 #include <stdio.h>
+
+namespace std {
+  using ::printf;
+  using ::snprintf;
+  using ::vfprintf;
+  using ::vsnprintf;
+  using ::getchar;
+
+  using ::size_t;
+}
+
+#endif

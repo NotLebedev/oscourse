@@ -1,1 +1,15 @@
+#ifndef JOS_INC_CSTDDEF
+#define JOS_INC_CSTDDEF
+
 #include <stddef.h>
+
+namespace std {
+  using ::ptrdiff_t;
+  using ::size_t;
+  using ::max_align_t;
+  using nullptr_t = decltype(nullptr);
+
+  enum class byte : unsigned char {};
+}
+
+#endif

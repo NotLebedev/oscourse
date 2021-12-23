@@ -170,7 +170,7 @@ void PoolAllocatorNoAsanImpl::free(void *addr) {
         if (pool.returnChunk(addr))
             return;
     // printf("Free of address that was not previously returned by malloc");
-    std::abort();
+    abort();
 }
 
 PoolAllocatorNoAsanImpl::PoolAllocatorNoAsanImpl() {

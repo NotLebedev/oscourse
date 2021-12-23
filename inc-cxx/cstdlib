@@ -1,1 +1,17 @@
+#ifndef JOS_INC_CSTDLIB
+#define JOS_INC_CSTDLIB
+
 #include <stdlib.h>
+
+namespace std {
+using ::atexit;
+using ::exit;
+using ::malloc;
+using ::aligned_alloc;
+using ::calloc;
+using ::free;
+using ::realloc;
+using ::abort;
+}
+
+#endif

@@ -1,1 +1,10 @@
+#ifndef JOS_INC_CSTDARG
+#define JOS_INC_CSTDARG
+
 #include <stdarg.h>
+
+namespace std {
+  using ::va_list;
+}
+
+#endif
