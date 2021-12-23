@@ -1,4 +1,4 @@
-#include <inc-cxx/libcxx.h>
+#include <inc/lib.h>
 typedef int __guard;
 
 #define _GUARD_FREE 0x0

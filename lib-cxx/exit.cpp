@@ -1,7 +1,7 @@
-#include <inc-cxx/libcxx.h>
+#include <inc/lib.h>
 #include "atexit.h"
 
-#include <inc-cxx/stdio.h>
+#include <inc/stdio.h>
 extern "C"
 void exit(void) {
     __cxa_finalize(nullptr);

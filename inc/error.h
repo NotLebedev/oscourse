@@ -2,6 +2,8 @@
 
 #ifndef JOS_INC_ERROR_H
 #define JOS_INC_ERROR_H
+#include <inc/sys/cdefs.h>
+__BEGIN_DECLS
 
 enum {
     /* Kernel error codes -- keep in sync with list in lib/printfmt.c. */
@@ -30,4 +32,5 @@ enum {
     MAXERROR
 };
 
+__END_DECLS
 #endif /* !JOS_INC_ERROR_H */

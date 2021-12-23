@@ -3,6 +3,8 @@
 
 #include <inc/stdarg.h>
 #include <stddef.h>
+#include <inc/sys/cdefs.h>
+__BEGIN_DECLS
 
 #ifndef NULL
 #define NULL ((void *)0)
@@ -30,5 +32,5 @@ int vfprintf(int fd, const char *fmt, va_list);
 
 /* lib/readline.c */
 char *readline(const char *prompt);
-
+__END_DECLS
 #endif /* !JOS_INC_STDIO_H */

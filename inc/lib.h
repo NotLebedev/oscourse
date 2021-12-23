@@ -21,6 +21,13 @@
 #include <inc/fs.h>
 #include <inc/fd.h>
 #include <inc/args.h>
+#include <inc/sys/cdefs.h>
+
+/* main user program */
+/* defined in sys/cdefs.h*/
+__ENTRY_DECL void __ENTRY_POINT(int argc, char **argv);
+
+__BEGIN_DECLS
 
 #ifdef SANITIZE_USER_SHADOW_BASE
 /* asan unpoison routine used for whitelisting regions. */
@@ -32,9 +39,6 @@ void *__nosan_memcpy(void *, const void *src, size_t);
 #endif
 
 #define USED(x) (void)(x)
-
-/* main user program */
-void umain(int argc, char **argv);
 
 /* libmain.c or entry.S */
 extern const char *binaryname;
@@ -177,4 +181,5 @@ extern void (*volatile sys_yield)(void);
 #define debug 0
 #endif
 
+__END_DECLS
 #endif /* !JOS_INC_LIB_H */

@@ -5,6 +5,8 @@
 #ifndef JOS_INC_TIME_H
 #define JOS_INC_TIME_H
 
+#include <inc/sys/cdefs.h>
+__BEGIN_DECLS
 struct tm {
     int tm_sec;  /* Seconds.     [0-60] */
     int tm_min;  /* Minutes.     [0-59] */
@@ -67,5 +69,5 @@ snprint_datetime(char *buf, int size, struct tm *tm) {
              tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,
              tm->tm_hour, tm->tm_min, tm->tm_sec);
 }
-
+__END_DECLS
 #endif

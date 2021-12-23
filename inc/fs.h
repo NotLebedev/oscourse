@@ -5,6 +5,8 @@
 
 #include <inc/types.h>
 #include <inc/mmu.h>
+#include <inc/sys/cdefs.h>
+__BEGIN_DECLS
 
 typedef uint32_t blockno_t;
 
@@ -118,4 +120,5 @@ union Fsipc {
     char _pad[PAGE_SIZE];
 };
 
+__END_DECLS
 #endif /* !JOS_INC_FS_H */

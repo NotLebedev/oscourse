@@ -2,6 +2,8 @@
 #define JOS_INC_X86_H
 
 #include <inc/types.h>
+#include <inc/sys/cdefs.h>
+__BEGIN_DECLS
 
 static inline void __attribute__((always_inline))
 breakpoint(void) {
@@ -279,5 +281,5 @@ static inline void __attribute__((always_inline))
 nmi_disable(void) {
     outb(CMOS_CMD, inb(CMOS_CMD) | CMOS_NMI_LOCK);
 }
-
+__END_DECLS
 #endif /* !JOS_INC_X86_H */

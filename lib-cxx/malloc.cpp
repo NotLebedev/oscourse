@@ -1,6 +1,6 @@
 #include <inc-cxx/stdlib.h>
-#include <inc-cxx/libcxx.h>
-#include <inc-cxx/string.h>
+#include <inc/lib.h>
+#include <inc/string.h>
 
 #include "pool-allocator.h"
 
@@ -18,7 +18,7 @@ extern "C" void* calloc(size_t num, size_t size) {
     PoolAllocator *alloc = get();
     void *mem = alloc->alloc(size, alignof(max_align_t));
     if (mem != nullptr)
-        std::memset(mem, 0, size);
+        memset(mem, 0, size);
     return mem;
 }
 

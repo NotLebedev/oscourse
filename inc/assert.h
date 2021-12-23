@@ -4,6 +4,8 @@
 #define JOS_INC_ASSERT_H
 
 #include <inc/stdio.h>
+#include <inc/sys/cdefs.h>
+__BEGIN_DECLS
 
 void _warn(const char*, int, const char*, ...) __attribute__((format(printf, 3, 4)));
 _Noreturn void _panic(const char*, int, const char*, ...) __attribute__((format(printf, 3, 4)));
@@ -19,4 +21,5 @@ _Noreturn void _panic(const char*, int, const char*, ...) __attribute__((format(
 
 #define static_assert _Static_assert
 
+__END_DECLS
 #endif /* !JOS_INC_ASSERT_H */

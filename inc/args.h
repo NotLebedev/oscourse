@@ -1,6 +1,9 @@
 #ifndef JOS_INC_ARGS_H
 #define JOS_INC_ARGS_H
 
+#include <inc/sys/cdefs.h>
+__BEGIN_DECLS
+
 struct Argstate;
 
 /* JOS command-line parsing functions. */
@@ -79,4 +82,5 @@ struct Argstate {
     const char *argvalue;
 };
 
+__END_DECLS
 #endif

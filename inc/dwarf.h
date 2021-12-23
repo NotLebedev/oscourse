@@ -2,7 +2,8 @@
 #define JOS_DWARF_H
 #include <inc/types.h>
 #include <inc/string.h>
-
+#include <inc/sys/cdefs.h>
+__BEGIN_DECLS
 /* DWARF4 debugging info */
 
 #define DW_TAG_array_type       0x01
@@ -467,4 +468,5 @@ dwarf_read_leb128(const char *addr, int64_t *ret) {
     *ret = result;
     return count;
 }
+__END_DECLS
 #endif

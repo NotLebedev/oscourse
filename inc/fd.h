@@ -7,6 +7,8 @@
 
 #include <inc/types.h>
 #include <inc/fs.h>
+#include <inc/sys/cdefs.h>
+__BEGIN_DECLS
 
 struct Fd;
 struct Stat;
@@ -55,4 +57,5 @@ extern struct Dev devfile;
 extern struct Dev devcons;
 extern struct Dev devpipe;
 
+__END_DECLS
 #endif /* not JOS_INC_FD_H */

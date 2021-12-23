@@ -6,6 +6,8 @@
 #include <inc/types.h>
 #include <inc/trap.h>
 #include <inc/memlayout.h>
+#include <inc/sys/cdefs.h>
+__BEGIN_DECLS
 
 typedef int32_t envid_t;
 
@@ -83,5 +85,5 @@ struct Env {
     envid_t env_ipc_from;    /* envid of the sender */
     int env_ipc_perm;        /* Perm of page mapping received */
 };
-
+__END_DECLS
 #endif /* !JOS_INC_ENV_H */
