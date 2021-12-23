@@ -15,7 +15,7 @@ printf(#TYPE " " FORMAT " " FORMAT " " FORMAT "\n", \
 
 
 void testLimits() {
-    printf("type rtti-type lowest() min() max()\n");
+    printf("type lowest() min() max()\n");
     LIMITS_TEST_PRINT(char, "%d");
     LIMITS_TEST_PRINT(signed char, "%d");
     LIMITS_TEST_PRINT(unsigned char, "%d");

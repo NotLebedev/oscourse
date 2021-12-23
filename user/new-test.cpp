@@ -12,7 +12,7 @@ int *fill(int size) {
 }
 
 void print(int *c, int size) {
-    printf("[]");
+    printf("[");
     for (int i = 0; i < size; i++)
         printf("%d, ", c[i]);
     printf("]\n");

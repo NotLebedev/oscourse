@@ -22,22 +22,22 @@ new_handler set_new_handler(new_handler new_p) noexcept {
 }
 }
 
-void * operator new(size_t size) {
+[[nodiscard]] void* operator new(size_t size) {
     void *res = malloc(size);
     if (res == nullptr)
         std::newHandler();
     return res;
 }
 
-void* operator new(size_t size, const std::nothrow_t&) noexcept {
+[[nodiscard]] void* operator new(size_t size, const std::nothrow_t&) noexcept {
     return malloc(size);
 }
 
-void* operator new[](size_t size) {
+[[nodiscard]] void* operator new[](size_t size) {
     return ::operator new(size);
 }
 
-void* operator new[](size_t size, const std::nothrow_t&) noexcept {
+[[nodiscard]] void* operator new[](size_t size, const std::nothrow_t&) noexcept {
     return ::operator new(size);
 }
 
@@ -67,57 +67,51 @@ operator delete[] (void* ptr, const std::nothrow_t&) noexcept
     ::operator delete[](ptr);
 }
 
-void
-operator delete[] (void* ptr, size_t) noexcept
+void operator delete[] (void* ptr, size_t) noexcept
 {
     ::operator delete[](ptr);
 }
 
-void *operator new(size_t size, std::align_val_t alignment) {
+[[nodiscard]] void *operator new(size_t size, std::align_val_t alignment) {
     void *res = aligned_alloc(static_cast<size_t>(alignment), size);
     if (res == nullptr)
         std::newHandler();
     return res;
 }
 
-void*
-operator new(size_t size, std::align_val_t alignment, const std::nothrow_t&) noexcept
+[[nodiscard]] void* operator new(size_t size, std::align_val_t alignment, 
+    const std::nothrow_t&) noexcept
 {
     return aligned_alloc(static_cast<size_t>(alignment), size);
 }
 
-void*
-operator new[](size_t size, std::align_val_t alignment)
+[[nodiscard]] void* operator new[](size_t size, std::align_val_t alignment)
 {
     return ::operator new(size, alignment);
 }
 
-void*
-operator new[](size_t size, std::align_val_t alignment, const std::nothrow_t&) noexcept
+[[nodiscard]] void* operator new[](size_t size, std::align_val_t alignment,
+    const std::nothrow_t&) noexcept
 {
     return ::operator new(size, alignment);
 }
 
-void
-operator delete(void* ptr, std::align_val_t) noexcept
+void operator delete(void* ptr, std::align_val_t) noexcept
 {
     ::free(ptr);
 }
 
-void
-operator delete(void* ptr, size_t, std::align_val_t alignment) noexcept
+void operator delete(void* ptr, size_t, std::align_val_t alignment) noexcept
 {
     ::operator delete(ptr, alignment);
 }
 
-void
-operator delete[] (void* ptr, std::align_val_t alignment) noexcept
+void operator delete[] (void* ptr, std::align_val_t alignment) noexcept
 {
     ::operator delete(ptr, alignment);
 }
 
-void
-operator delete[] (void* ptr, size_t, std::align_val_t alignment) noexcept
+void operator delete[] (void* ptr, size_t, std::align_val_t alignment) noexcept
 {
     ::operator delete[](ptr, alignment);
 }
