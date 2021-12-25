@@ -15,7 +15,7 @@
 #define CHUNK_FIXED_SIZE EXTRA_LARGE_CHUNK * 8
 
 #ifdef SANITIZE_USER_SHADOW_BASE
-#define CHUNK_SHADOW_EXTRA 128
+#define CHUNK_SHADOW_EXTRA 32
 static size_t poolProperties[][2] = {
         {MEDIUM_CHUNK - 2 * CHUNK_SHADOW_EXTRA, CHUNK_FIXED_SIZE / MEDIUM_CHUNK},
         {MEDIUM_CHUNK - 2 * CHUNK_SHADOW_EXTRA, CHUNK_FIXED_SIZE / MEDIUM_CHUNK},
@@ -41,6 +41,7 @@ extern uint8_t __bss_end;
 
 class Pool {
 public:
+    virtual ~Pool() {};
     /**
      * Get chunk from this pool of it's size with alignment align
      * @param align requested alignment for chunk
@@ -82,7 +83,7 @@ public:
         chunkSize_ = chunkSize;
         chunkCount_ = chunkCount;
     }
-    ~PoolNoAsanImpl();
+    ~PoolNoAsanImpl() override;
 
     void *getChunk(size_t align) override;
 
@@ -144,7 +145,8 @@ bool PoolNoAsanImpl::returnChunk(void *addr) {
 }
 
 PoolNoAsanImpl::~PoolNoAsanImpl() {
-    sys_unmap_region(CURENVID, pool, CHUNK_FIXED_SIZE);
+    if (poolReady)
+        sys_unmap_region(CURENVID, pool, CHUNK_FIXED_SIZE);
 }
 
 bool PoolNoAsanImpl::fromThisPool(void *addr) {
@@ -154,7 +156,7 @@ bool PoolNoAsanImpl::fromThisPool(void *addr) {
 class PoolAllocatorNoAsanImpl : public PoolAllocator {
 public:
     PoolAllocatorNoAsanImpl();
-    ~PoolAllocatorNoAsanImpl() = default;
+    ~PoolAllocatorNoAsanImpl() override = default;
 
     void *alloc(size_t size, size_t align) override;
 
@@ -215,7 +217,7 @@ public:
         chunkSize_ = chunkSize;
         chunkCount_ = chunkCount;
     }
-    ~PoolAsanImpl();
+    ~PoolAsanImpl() override;
 
     void *getChunk(size_t align) override;
 
@@ -236,7 +238,11 @@ private:
 
 void PoolAsanImpl::init_lazy() {
     poolReady = true;
-    pool = (uint8_t *) getMemory();
+    // Shift beginning of pool to align beginnings of chunks. shadowPre ouf
+    // first chunk of first pool is shifted into unallocated (and poisoned)
+    // page of before heap. first chunk of second pool is shifted into empty
+    // space at the end of first pool e.t.c.
+    pool = ((uint8_t *) getMemory()) - CHUNK_SHADOW_EXTRA;
     platform_asan_poison(pool, CHUNK_FIXED_SIZE);
     for (size_t i = 0; i < chunkCount_; i++) {
         platform_asan_unpoison(&(((AsanChunk *)(pool + chunkSize_ * i))->next), 8);
@@ -284,7 +290,8 @@ bool PoolAsanImpl::returnChunk(void *addr) {
 }
 
 PoolAsanImpl::~PoolAsanImpl() {
-    sys_unmap_region(CURENVID, pool, CHUNK_FIXED_SIZE);
+    if (poolReady)
+        sys_unmap_region(CURENVID, pool + CHUNK_SHADOW_EXTRA, CHUNK_FIXED_SIZE);
 }
 
 bool PoolAsanImpl::fromThisPool(void *addr) {
@@ -295,7 +302,7 @@ bool PoolAsanImpl::fromThisPool(void *addr) {
 class PoolAllocatorAsanImpl : public PoolAllocator {
 public:
     PoolAllocatorAsanImpl();
-    ~PoolAllocatorAsanImpl() = default;
+    ~PoolAllocatorAsanImpl() override = default;
 
     void *alloc(size_t size, size_t align) override;
 
@@ -363,4 +370,10 @@ PoolAllocator *get() {
     // Warning, not thread-safe at all. Luckily there are no threads in this
     // version of JOS, so well, whatever ¯\_(ツ)_/¯
     return &impl;
+}
+
+// Called in case of abort, to free allocated Memory
+// (abort does not call destructors with static storage duration)
+void abortFree() {
+    get()->~PoolAllocator();
 }

@@ -1,7 +1,8 @@
 #include <inc/lib.h>
-#include "atexit.h"
-
 #include <inc/stdio.h>
+#include "atexit.h"
+#include "pool-allocator.h"
+
 extern "C"
 void exit(void) {
     __cxa_finalize(nullptr);
@@ -22,13 +23,7 @@ void exit(void) {
 
 extern "C" {
 [[noreturn]] void abort() noexcept {
-    #ifdef COMP_GXX
-        /* Call all global destructors */
-        extern void (*__dtors_start)(), (*__dtors_end)();
-        void (**dtor)() = &__dtors_start;
-        while (dtor < &__dtors_end)
-            (*dtor++)();
-    #endif
+    abortFree();
 
     close_all();
 
