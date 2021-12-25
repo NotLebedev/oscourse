@@ -27,7 +27,7 @@
 
 // Class declarations shared between the typeinfo implementation files.
 
-#include "cxxabi.h"
+#include "cxxtinfo.h"
 
 namespace __cxxabiv1 {
 

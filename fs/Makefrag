@@ -42,6 +42,7 @@ USERAPPS :=		$(OBJDIR)/user/init \
 			$(OBJDIR)/user/realloc-test \
 			$(OBJDIR)/user/asan-test \
 			$(OBJDIR)/user/include-test \
+			$(OBJDIR)/user/exception-test \
 
 
 FSIMGFILES := $(FSIMGTXTFILES) $(USERAPPS)

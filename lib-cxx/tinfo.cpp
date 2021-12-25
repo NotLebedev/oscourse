@@ -34,7 +34,7 @@ std::type_info::
 
 // We can't rely on common symbols being shared between shared objects.
 bool std::type_info::
-operator== (const std::type_info& arg) const _GLIBCXX_NOEXCEPT
+operator== (const std::type_info& arg) const _GLIBCXXnoexcept
 {
 #if __GXX_MERGED_TYPEINFO_NAMES
   return name () == arg.name ();

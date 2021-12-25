@@ -14,7 +14,15 @@ LIB_CXX_SRCFILES :=	lib-cxx/libmain.cpp \
 			lib-cxx/new.cpp \
 			lib-cxx/pure.cpp \
 			lib-cxx/aux_type_info.cpp \
-			lib-cxx/cxa_aux_runtime.cpp
+			lib-cxx/cxa_aux_runtime.cpp \
+			lib-cxx/cxa_exception.cpp \
+			lib-cxx/cxa_personality.cpp \
+			lib-cxx/private_typeinfo.cpp \
+			lib-cxx/exception.cpp \
+			lib-cxx/fallback_malloc.cpp \
+			lib-cxx/cxa_handlers.cpp \
+			lib-cxx/cxa_default_handlers.cpp \
+			lib-cxx/cxa_exception_storage.cpp \
 
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.c, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_SRCFILES))
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.cpp, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_OBJFILES))
@@ -44,7 +52,7 @@ LIB_C_SRCFILES :=	lib/console.c \
 LIB_C_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_C_SRCFILES))
 LIB_C_OBJFILES := $(patsubst lib/%.S, $(OBJDIR)/lib/%.o, $(LIB_C_OBJFILES))
 
-LIB_CXX_CFLAGS := -fno-exceptions -std=c++20
+LIB_CXX_CFLAGS := -D__USING_SJLJ_EXCEPTIONS__ -std=c++20
 
 $(OBJDIR)/lib-cxx/%.o: lib-cxx/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<

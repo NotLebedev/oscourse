@@ -2,30 +2,10 @@
 #include <stddef.h>
 #include <inc-cxx/new>
 
-namespace std {
-void defaultNewHandler() {
-    abort();
-}
-
-new_handler newHandler = defaultNewHandler;
-
-new_handler get_new_handler() noexcept {
-    return newHandler;
-}
-new_handler set_new_handler(new_handler new_p) noexcept {
-    new_handler oldNewHandler = nullptr;
-    if (newHandler != defaultNewHandler)
-        oldNewHandler = newHandler;
-
-    newHandler = new_p;
-    return oldNewHandler;
-}
-}
-
 [[nodiscard]] void* operator new(size_t size) {
     void *res = malloc(size);
     if (res == nullptr)
-        std::newHandler();
+        std::get_new_handler()();
     return res;
 }
 
@@ -75,11 +55,11 @@ void operator delete[] (void* ptr, size_t) noexcept
 [[nodiscard]] void *operator new(size_t size, std::align_val_t alignment) {
     void *res = aligned_alloc(static_cast<size_t>(alignment), size);
     if (res == nullptr)
-        std::newHandler();
+        std::get_new_handler()();
     return res;
 }
 
-[[nodiscard]] void* operator new(size_t size, std::align_val_t alignment, 
+[[nodiscard]] void* operator new(size_t size, std::align_val_t alignment,
     const std::nothrow_t&) noexcept
 {
     return aligned_alloc(static_cast<size_t>(alignment), size);
