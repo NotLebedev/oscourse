@@ -19,6 +19,7 @@ LIB_CXX_SRCFILES :=	lib-cxx/libmain.cpp \
 			lib-cxx/cxa_handlers.cpp \
 			lib-cxx/cxa_default_handlers.cpp \
 			lib-cxx/cxa_exception_storage.cpp \
+			lib-cxx/unwind-sjlj.cpp \
 
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.c, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_SRCFILES))
 LIB_CXX_OBJFILES := $(patsubst lib-cxx/%.cpp, $(OBJDIR)/lib-cxx/%.o, $(LIB_CXX_OBJFILES))
@@ -51,7 +52,9 @@ LIB_C_OBJFILES := $(patsubst lib/%.S, $(OBJDIR)/lib/%.o, $(LIB_C_OBJFILES))
 LIB_CXX_CFLAGS := -D__USING_SJLJ_EXCEPTIONS__ -std=c++20
 
 ifdef JOSLLVM
-LIB_CXX_CFLAGS += -fsjlj-exceptions
+
+LIB_CXX_CFLAGS += -D_LIBUNWIND_BUILD_SJLJ_APIS -fsjlj-exceptions
+
 endif
 
 $(OBJDIR)/lib-cxx/%.o: lib-cxx/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
