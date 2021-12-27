@@ -94,14 +94,6 @@ namespace std
     const char* name() const noexcept
     { return __name[0] == '*' ? __name + 1 : __name; }
 
-#if !__GXX_TYPEINFO_EQUALITY_INLINE
-    // In old abi, or when weak symbols are not supported, there can
-    // be multiple instances of a type_info object for one
-    // type. Uniqueness must use the _name value, not object address.
-    bool before(const type_info& __arg) const noexcept;
-    bool operator==(const type_info& __arg) const noexcept;
-#else
-  #if !__GXX_MERGED_TYPEINFO_NAMES
     /** Returns true if @c *this precedes @c __arg in the implementation's
      *  collation order.  */
     // Even with the new abi, on systems that support dlopen
@@ -118,33 +110,15 @@ namespace std
 	      || (__name[0] != '*' &&
 		  __builtin_strcmp (__name, __arg.__name) == 0));
     }
-  #else
-    // On some targets we can rely on type_info's NTBS being unique,
-    // and therefore address comparisons are sufficient.
-    bool before(const type_info& __arg) const noexcept
-    { return __name < __arg.__name; }
 
-    bool operator==(const type_info& __arg) const noexcept
-    { return __name == __arg.__name; }
-  #endif
-#endif
-
-#if __cpp_impl_three_way_comparison < 201907L
     bool operator!=(const type_info& __arg) const noexcept
     { return !operator==(__arg); }
-#endif
 
-#if __cplusplus >= 201103L
     size_t hash_code() const noexcept
     {
-#  if !__GXX_MERGED_TYPEINFO_NAMES
       return _Hash_bytes(name(), __builtin_strlen(name()),
 			 static_cast<size_t>(0xc70f6907UL));
-#  else
-      return reinterpret_cast<size_t>(__name);
-#  endif
     }
-#endif // C++11
 
     // Return true if this is a pointer type of some kind
     virtual bool __is_pointer_p() const;

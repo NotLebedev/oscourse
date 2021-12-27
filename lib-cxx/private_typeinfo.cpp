@@ -91,76 +91,12 @@ namespace __cxxabiv1
 
 // __shim_type_info
 
-__shim_type_info::~__shim_type_info()
-{
-}
+__shim_type_info::~__shim_type_info() {}
 
 void __shim_type_info::noop1() const {}
 void __shim_type_info::noop2() const {}
 
 // __fundamental_type_info
-
-// This miraculously (compiler magic) emits the type_info's for:
-//   1. all of the fundamental types
-//   2. pointers to all of the fundamental types
-//   3. pointers to all of the const fundamental types
-__fundamental_type_info::~__fundamental_type_info()
-{
-}
-
-// __array_type_info
-
-__array_type_info::~__array_type_info()
-{
-}
-
-// __function_type_info
-
-__function_type_info::~__function_type_info()
-{
-}
-
-// __enum_type_info
-
-__enum_type_info::~__enum_type_info()
-{
-}
-
-// __class_type_info
-
-__class_type_info::~__class_type_info()
-{
-}
-
-// __si_class_type_info
-
-__si_class_type_info::~__si_class_type_info()
-{
-}
-
-// __vmi_class_type_info
-
-__vmi_class_type_info::~__vmi_class_type_info()
-{
-}
-
-// __pbase_type_info
-
-__pbase_type_info::~__pbase_type_info()
-{
-}
-
-// __pointer_type_info
-
-__pointer_type_info::~__pointer_type_info()
-{
-}
-
-// __pointer_to_member_type_info
-
-__pointer_to_member_type_info::~__pointer_to_member_type_info()
-{
-}
 
 // can_catch
 

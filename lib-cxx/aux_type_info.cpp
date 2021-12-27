@@ -36,7 +36,7 @@ __do_catch (const type_info *thr_type,
   if (*this == *thr_type)
     return true;      // same type
 
-#if __cpp_rtti
+//#if __cpp_rtti
   if (*thr_type == typeid (nullptr))
     {
       // A catch handler for any pointer type matches nullptr_t.
@@ -66,7 +66,7 @@ __do_catch (const type_info *thr_type,
 
   if (typeid (*this) != typeid (*thr_type))
     return false;     // not both same kind of pointers
-#endif
+//#endif
 
   if (!(outer & 1))
     // We're not the same and our outer pointers are not all const qualified
