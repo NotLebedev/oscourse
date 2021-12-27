@@ -28,6 +28,18 @@ void stringTest() {
     throw "Exception";
 }
 
+void level3() {
+    throw FallthroughException();
+}
+
+void level2() {
+    level3();
+}
+
+void level1() {
+    level2();
+}
+
 int main (int argc, char **argv) {
     int x = 50;
     int y = 0;
@@ -44,6 +56,12 @@ int main (int argc, char **argv) {
         stringTest();
     } catch (const char *e) {
         printf("%s\n", e);
+    }
+
+    try {
+        level1();
+    } catch (std::exception& e) {
+        printf("%s\n", e.what());
     }
     throw FallthroughException{};
     return 0;

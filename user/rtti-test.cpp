@@ -2,13 +2,19 @@
 #include <typeinfo>
 
 class BaseClass {
+public:
+    virtual ~BaseClass() {};
     virtual void f() {}; // BaseClass полиморфный
 };
 class Derived1: public BaseClass {
+public:
+    ~Derived1() override {};
     void f() override {}
 };
 
 class Derived2: public BaseClass {
+public:
+    ~Derived2() override {};
     void f() override {}
 };
 
@@ -45,5 +51,15 @@ int main(int argc, char **argv)
 
     p = &ob2;
     printf("p is pointing to an object of type %s\n", typeid(*p).name());
+
+    const BaseClass *c = new Derived1{};
+
+    if (dynamic_cast<const Derived1*>(c) != nullptr)
+        printf("correct dynamic_cast ok\n");
+
+    if (dynamic_cast<const Derived2*>(c) == nullptr)
+        printf("wrong dynamic_cast ok\n");
+
+    delete c;
     return 0;
 }
