@@ -52,7 +52,11 @@ LIB_C_SRCFILES :=	lib/console.c \
 LIB_C_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_C_SRCFILES))
 LIB_C_OBJFILES := $(patsubst lib/%.S, $(OBJDIR)/lib/%.o, $(LIB_C_OBJFILES))
 
-LIB_CXX_CFLAGS := -D__USING_SJLJ_EXCEPTIONS__ -std=c++20
+LIB_CXX_CFLAGS := -D__USING_SJLJ_EXCEPTIONS__ -D_LIBUNWIND_BUILD_SJLJ_APIS -std=c++20
+
+ifdef JOSLLVM
+LIB_CXX_CFLAGS += -fsjlj-exceptions
+endif
 
 $(OBJDIR)/lib-cxx/%.o: lib-cxx/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<

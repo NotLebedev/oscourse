@@ -41,10 +41,6 @@
 #ifndef _CXXABI_H
 #define _CXXABI_H 1
 
-#pragma GCC system_header
-
-#pragma GCC visibility push(default)
-
 #include <inc-cxx/typeinfo>
 #include <stddef.h>
 #include <stdint.h>
@@ -61,7 +57,7 @@ namespace __cxxabiv1
     __cxa_free_exception(void *thrown_exception) throw();
 
     // 2.4.3 Throwing the Exception Object
-    extern  [[noreturn]] void
+    [[noreturn]] extern void
     __cxa_throw(void *thrown_exception, std::type_info *tinfo,
                 void (*dest)(void *));
 
@@ -74,19 +70,19 @@ namespace __cxxabiv1
     extern  std::type_info *__cxa_current_exception_type();
 
     // 2.5.4 Rethrowing Exceptions
-    extern  [[noreturn]] void __cxa_rethrow();
+    [[noreturn]] extern void __cxa_rethrow();
 
     // 2.6 Auxiliary Runtime APIs
-    extern  [[noreturn]] void __cxa_bad_cast(void);
-    extern  [[noreturn]] void __cxa_bad_typeid(void);
-    extern  [[noreturn]] void
+    [[noreturn]] extern void __cxa_bad_cast(void);
+    [[noreturn]] extern void __cxa_bad_typeid(void);
+    [[noreturn]] extern void
     __cxa_throw_bad_array_new_length(void);
 
     // 3.2.6 Pure Virtual Function API
-    extern  [[noreturn]] void __cxa_pure_virtual(void);
+    [[noreturn]] extern void __cxa_pure_virtual(void);
 
     // 3.2.7 Deleted Virtual Function API
-    extern  [[noreturn]] void __cxa_deleted_virtual(void);
+    [[noreturn]] extern void __cxa_deleted_virtual(void);
 
     // 3.3.2 One-time Construction API
     #if defined(_LIBCXXABI_GUARD_ABI_ARM)

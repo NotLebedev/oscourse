@@ -42,7 +42,7 @@
 // is_equal() with use_strcmp=false so the string names are not compared.
 
 #include <inc/string.h>
-#include <stddef.h>
+#include <inc-cxx/cstddef>
 
 #define _LIBCPP_STD_VER 20
 #ifndef __is_identifier
@@ -386,7 +386,7 @@ __pointer_type_info::can_catch(const __shim_type_info* thrown_type,
                                void*& adjustedPtr) const
 {
     // bullet 4
-    if (is_equal(thrown_type, &typeid(nullptr_t), false)) {
+    if (is_equal(thrown_type, &typeid(std::nullptr_t), false)) {
       adjustedPtr = nullptr;
       return true;
     }
@@ -495,7 +495,7 @@ bool __pointer_type_info::can_catch_nested(
 bool __pointer_to_member_type_info::can_catch(
     const __shim_type_info* thrown_type, void*& adjustedPtr) const {
     // bullet 4
-    if (is_equal(thrown_type, &typeid(nullptr_t), false)) {
+    if (is_equal(thrown_type, &typeid(std::nullptr_t), false)) {
       // We assume that the pointer to member representation is the same for
       // all pointers to data members and for all pointers to member functions.
       struct X {};

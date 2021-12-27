@@ -13,7 +13,7 @@
 #include <lib-cxx/addressof.h>
 
 #include <stddef.h>
-#include <inc-cxx/stdlib.h>
+#include <inc-cxx/cstdlib>
 #include <inc-cxx/type_traits>
 #include <inc-cxx/version>
 
