@@ -35,33 +35,33 @@ static void demangling_terminate_handler()
                 reinterpret_cast<_Unwind_Exception*>(exception_header + 1) - 1;
             if (__isOurExceptionClass(unwind_exception))
             {
-                // void* thrown_object =
-                //     __getExceptionClass(unwind_exception) == kOurDependentExceptionClass ?
-                //         ((__cxa_dependent_exception*)exception_header)->primaryException :
-                //         exception_header + 1;
+                void* thrown_object =
+                    __getExceptionClass(unwind_exception) == kOurDependentExceptionClass ?
+                        ((__cxa_dependent_exception*)exception_header)->primaryException :
+                        exception_header + 1;
                 const __shim_type_info* thrown_type =
                     static_cast<const __shim_type_info*>(exception_header->exceptionType);
 
                 const char* name = thrown_type->name();
 
-                // const __shim_type_info* catch_type =
-                //     static_cast<const __shim_type_info*>(&typeid(std::exception));
-                //
-                // if (catch_type->can_catch(thrown_type, thrown_object)) {
-                //     const std::exception* e = static_cast<const std::exception*>(thrown_object);
-                //     printf("terminating with %s exception of type %s: %s\n",
-                //                   cause, name, e->what());
-                //    abort();
-                // } else {
+                const __shim_type_info* catch_type =
+                    static_cast<const __shim_type_info*>(&typeid(std::exception));
+
+                if (catch_type->can_catch(thrown_type, thrown_object)) {
+                    const std::exception* e = static_cast<const std::exception*>(thrown_object);
+                    printf("terminating with %s exception of type %s: %s\n",
+                                  cause, name, e->what());
+                   abort();
+                } else {
                     printf("terminating with %s exception of type %s\n",
                                    cause, name);
                     abort();
                 }
-            // } else {
+            } else {
                 // Else we're terminating with a foreign exception
                 printf("terminating with %s foreign exception\n", cause);
                 abort();
-            // }
+            }
         }
     }
     // Else just note that we're terminating

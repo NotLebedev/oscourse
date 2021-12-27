@@ -6,14 +6,10 @@ LIB_CXX_SRCFILES :=	lib-cxx/libmain.cpp \
 			lib-cxx/atexit.cpp \
 			lib-cxx/malloc.cpp \
 			lib-cxx/pool-allocator.cpp \
-			lib-cxx/class_type_info.cpp \
 			lib-cxx/hash_bytes.cpp \
-			lib-cxx/vmi_class_type_info.cpp \
-			lib-cxx/si_class_type_info.cpp \
 			lib-cxx/tinfo.cpp \
 			lib-cxx/new.cpp \
 			lib-cxx/pure.cpp \
-			lib-cxx/aux_type_info.cpp \
 			lib-cxx/cxa_aux_runtime.cpp \
 			lib-cxx/cxa_exception.cpp \
 			lib-cxx/cxa_personality.cpp \
@@ -52,7 +48,7 @@ LIB_C_SRCFILES :=	lib/console.c \
 LIB_C_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_C_SRCFILES))
 LIB_C_OBJFILES := $(patsubst lib/%.S, $(OBJDIR)/lib/%.o, $(LIB_C_OBJFILES))
 
-LIB_CXX_CFLAGS := -D__USING_SJLJ_EXCEPTIONS__ -D_LIBUNWIND_BUILD_SJLJ_APIS -std=c++20
+LIB_CXX_CFLAGS := -D__USING_SJLJ_EXCEPTIONS__ -std=c++20
 
 ifdef JOSLLVM
 LIB_CXX_CFLAGS += -fsjlj-exceptions
