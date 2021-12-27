@@ -10,6 +10,13 @@ SECTIONS
 	/* Load programs at this address: "." means the current address */
 	. = 0x800000;
 
+    .gcc_except_table : ONLY_IF_RO {
+        __gcc_except_table_start = .;
+        *(.gcc_except_table .gcc_except_table.*)
+		. = ALIGN(8);
+        __gcc_except_table_end = .;
+    }
+
 	.text : {
 		__text_start = .;
 		*(.text .stub .text.* .gnu.linkonce.t.*)

@@ -6,7 +6,9 @@ ULDCXXFLAGS = -T user/user.ld --warn-common
 USER_CXX_FLAGS = -I inc-cxx -I inc -std=c++20
 
 ifdef JOSLLVM
+
 USER_CXX_FLAGS += -fsjlj-exceptions
+
 endif
 
 $(OBJDIR)/user/%.o: user/%.c $(OBJDIR)/.vars.USER_CFLAGS

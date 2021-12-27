@@ -24,6 +24,10 @@ int division(int a, int b) {
    return a / b;
 }
 
+void stringTest() {
+    throw "Exception";
+}
+
 int main (int argc, char **argv) {
     int x = 50;
     int y = 0;
@@ -34,6 +38,12 @@ int main (int argc, char **argv) {
         printf("%d\n", z);
     } catch (std::exception& e) {
         printf("%s\n", e.what());
+    }
+
+    try {
+        stringTest();
+    } catch (const char *e) {
+        printf("%s\n", e);
     }
     throw FallthroughException{};
     return 0;

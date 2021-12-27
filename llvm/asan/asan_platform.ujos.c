@@ -32,6 +32,9 @@
 /* FIXME: We need to wrap all the custom allocators we use and track the allocated memory. */
 /* There should probably be more of them (especially in the kernel). */
 
+extern uint8_t __gcc_except_table_start;
+extern uint8_t __gcc_except_table_end;
+
 extern uint8_t __data_start;
 extern uint8_t __data_end;
 
@@ -67,7 +70,7 @@ asan_shadow_allocator(struct UTrapframe *utf) {
     // LAB 9: Your code here
     if (!SHADOW_ADDRESS_VALID(utf->utf_fault_va))
         return 0;
-    
+
     sys_alloc_region(0, ROUNDDOWN((void *)utf->utf_fault_va, PAGE_SIZE), PAGE_SIZE, ALLOC_ONE | PROT_R | PROT_W);
     return 1;
 }
@@ -107,9 +110,12 @@ platform_asan_init() {
     /* 1. Program segments (text, data, rodata, bss) */
     // LAB 8: Your code here
     platform_asan_unpoison(&__text_start, &__text_end - &__text_start);
+
     platform_asan_unpoison(&__data_start, &__data_end - &__data_start);
     platform_asan_unpoison(&__rodata_start, &__rodata_end - &__rodata_start);
     platform_asan_unpoison(&__bss_start, &__bss_end - &__bss_start);
+
+    platform_asan_unpoison(&__gcc_except_table_start, &__gcc_except_table_end - &__gcc_except_table_start);
 
     /* 2. Stacks (USER_EXCEPTION_STACK_TOP, USER_STACK_TOP) */
     // LAB 8: Your code here
